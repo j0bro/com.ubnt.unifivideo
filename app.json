@@ -1,0 +1,41 @@
+{
+    "id": "com.ubnt.unifivideo",
+    "sdk": 2,
+    "name": {
+        "en": "UniFi Video"
+    },
+    "description": {
+        "en": "Adds support for Ubiquiti UniFi Video devices."
+    },
+    "images": {
+        "large": "/assets/images/large.png",
+        "small": "/assets/images/small.png"
+    },
+    "category": "security",
+    "version": "0.9.0",
+    "compatibility": ">=1.5.0",
+    "author": {
+        "name": "Jeroen Brosens",
+        "email": "j.brosens+athom@gmail.com"
+    },
+    "drivers": [
+        {
+            "id": "unifi_nvr",
+            "class": "other",
+            "capabilities": [],
+            "name": {
+                "en": "UniFi NVR"
+            },
+            "images": {
+                "large": "/drivers/unifi_nvr/assets/images/large.png",
+                "small": "/drivers/unifi_nvr/assets/images/small.png"
+            },
+            "pair": [
+                {
+                    "id": "list_devices",
+                    "template": "list_devices"
+                }
+            ]
+        }
+    ]
+}
