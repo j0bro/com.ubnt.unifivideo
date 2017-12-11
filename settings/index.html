@@ -15,12 +15,35 @@
         <legend>UniFi Video Settings</legend>
     </fieldset>
 
+    <div class="field row">
+        <label for="apikey">API key</label>
+        <input id="apikey" type="text" value="" />
+    </div>
+
     <button id="save" class="right">Save changes</button>
 
     <script type="text/javascript">
 
         function onHomeyReady(Homey) {
             Homey.ready();
+
+            var apiKeyElement = document.getElementById('apikey');
+            var saveElement = document.getElementById('save');
+
+            Homey.get('unifi_video_apikey', function (err, unifiVideoApiKey) {
+                if (err) {
+                    return Homey.alert(err);
+                }
+                apiKeyElement.value = unifiVideoApiKey;
+            });
+
+            saveElement.addEventListener('click', function (e) {
+                Homey.set('unifi_video_apikey', apiKeyElement.value, function (err) {
+                    if (err) {
+                        return Homey.alert(err);
+                    }
+                });
+            });
         }
     </script>
 </body>
