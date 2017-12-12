@@ -1,0 +1,34 @@
+<html>
+        <head>
+            <title>Live EvoStream WebSocket Video</title>
+            <meta charset="UTF-8">
+            <script src="//ers.evostream.com:5050/demo/js/evohtml5player.bundle.js"></script>
+            <script>
+                var ws;
+    
+                function startPlay(uri) {
+    
+                    initializePlayer();
+    
+                    var streamURI = uri;
+                    streamURI += "?progressive";
+    
+                    //connect to the streaming server via WS
+                    ws = new WebSocket(streamURI);
+                    ws.binaryType = 'arraybuffer';
+    
+                    //setup the handler for when data arrives via WS
+                    ws.onmessage = function (msg) {
+                       var arrayView = new Uint8Array(msg.data);
+                       parseData(arrayView);
+                   };
+               }
+            </script>
+        </head>
+        <body>
+            <video id="videoElement" controls autoplay></video><br>
+            <script>
+               startPlay('ws://192.168.1.2:7445/rFzXery_F09FC213E986_0');
+            </script>
+        </body>
+    </html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <video controls width="80%"></video>
+
+    <script type="text/javascript">
+        var mediaSource = new MediaSource();
+        var buffer;
+        var queue = [];
+
+        var video = document.querySelector('video');
+        video.crossOrigin = 'anonymous';
+        video.src = URL.createObjectURL(mediaSource);
+
+        mediaSource.addEventListener('sourceopen', function (e) {
+            console.log(this.readyState);
+
+            buffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+            buffer.addEventListener('update', function () {
+                mediaSource.endOfStream();
+                video.play();
+
+                if (queue.length > 0 && !buffer.updating) {
+                    buffer.appendBuffer(queue.shift());
+                }
+            });
+
+            var websocket = new WebSocket('ws://192.168.1.2:7445/obqDBjJ_F09FC213E986_0?progressive=true');
+            websocket.binaryType = 'arraybuffer';
+            websocket.onmessage = function (e) {
+                if (buffer.updating || queue.length > 0) {
+                    queue.push(e.data);
+                } else {
+                    buffer.appendBuffer(e.data);
+                }
+            };
+        }, false);
+
+
+    </script>
+</body>
+
+</html>
