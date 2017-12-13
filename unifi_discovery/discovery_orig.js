@@ -499,7 +499,7 @@ function scanForV2Devices() {
 function scanForDevices() {
     var message;
 
-    message = new Buffer([0x01, 0x00, 0x00, 0x00]);
+    message = new Buffer([0x01, 0x00, 0x00, 0x00]).arrayBuffer;
 
     v1socket.send(message, MCAST_PORT, MCAST_ADDR, function (result) {
         console.log('Sent multicast search.');

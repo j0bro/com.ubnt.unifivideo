@@ -1,30 +1,38 @@
 'use strict';
 
 const Homey = require('homey');
+const UnifiVideoDiscovery = require('../../lib/UnifiVideoDiscovery');
 
-class UniFiNvr extends Homey.Driver {
+class UnifiNvrDriver extends Homey.Driver {
 
-    onPairListDevices( data, callback ) {
+    onInit() {
+
+    }
+
+    _onUnifiVideoDevice(device) {
+        if (device && device.platform === 'UniFi Video') {
+            console.log('Device found: ' + device.hostname, '@', device.ip);
+
+            this.found.push(device);
+        }
+    }
+
+    onPair(socket) {
+        socket.on('list_devices', (data, callback) => {
+            callback(null, this.found.map(device => (
+                {
+                    name: device.hostname,
+                    data: device
+                }
+            )));
+        });
         
-        let devices = [
-            {
-                'name': 'My Device',
-                'data': { },
+        this.found = [];
         
-                // Optional properties, these overwrite those specified in app.json:
-                // "icon": "/path/to/another/icon.svg",
-                // "capabilities": [ "onoff", "dim" ],
-                // "capabilitiesOptions: { "onoff": {} },
-                // "mobile": {},
-        
-                // Optional properties, device-specific:
-                // "store": { "foo": "bar" },
-                // "settings": {}
-            }
-        ];
-        
-        callback( null, devices );
+        this._discovery = new UnifiVideoDiscovery();
+        this._discovery.on('device', this._onUnifiVideoDevice.bind(this));
+        this._discovery.start();
     }
 }
 
-module.exports = UniFiNvr;
+module.exports = UnifiNvrDriver;
