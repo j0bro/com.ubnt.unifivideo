@@ -20,15 +20,15 @@
     },
     "drivers": [
         {
-            "id": "unifi_nvr",
+            "id": "uvc_nvr",
             "class": "other",
             "capabilities": [],
             "name": {
-                "en": "UniFi NVR"
+                "en": "UVC-NVR"
             },
             "images": {
-                "large": "/drivers/unifi_nvr/assets/images/large.png",
-                "small": "/drivers/unifi_nvr/assets/images/small.png"
+                "large": "/drivers/uvc_nvr/assets/images/large.png",
+                "small": "/drivers/uvc_nvr/assets/images/small.png"
             },
             "pair": [
                 {
