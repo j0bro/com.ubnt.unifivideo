@@ -3,10 +3,10 @@
 const Homey = require('homey');
 const UnifiDeviceDiscovery = require('../../lib/UnifiDeviceDiscovery');
 
-class UvcNvrDriver extends Homey.Driver {
+class UvcG3Driver extends Homey.Driver {
 
     _onDevice(device) {
-        if (device && device.platform === 'UniFi Video') {
+        if (device && device.platform === 'UVC G3') {
             this.log('Found: ' + device.hostname, '@', device.ip);
 
             this._found.push(device);
@@ -31,4 +31,4 @@ class UvcNvrDriver extends Homey.Driver {
     }
 }
 
-module.exports = UvcNvrDriver;
+module.exports = UvcG3Driver;

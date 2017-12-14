@@ -5,13 +5,31 @@
         "en": "UniFi Video"
     },
     "description": {
-        "en": "Adds support for Ubiquiti UniFi Video devices."
-    },
-    "images": {
-        "large": "/assets/images/large.png",
-        "small": "/assets/images/small.png"
+        "en": "Control Ubiquiti UniFi Video devices with Homey.",
+        "nl": "Bedien Ubiquiti UniFi Video apparaten met Homey."
     },
     "category": "security",
+    "tags": {
+        "en": [
+            "ubiquiti",
+            "unifi",
+            "security",
+            "camera",
+            "snapshot",
+            "recording"
+        ],
+        "nl": [
+            "ubiquiti",
+            "unifi",
+            "beveiligingscamera",
+            "camera",
+            "opname"
+        ]
+    },
+    "images": {
+        "large": "assets/images/large.png",
+        "small": "assets/images/small.png"
+    },
     "version": "0.9.0",
     "compatibility": ">=1.5.0",
     "author": {
@@ -27,8 +45,33 @@
                 "en": "UVC-NVR"
             },
             "images": {
-                "large": "/drivers/uvc_nvr/assets/images/large.png",
-                "small": "/drivers/uvc_nvr/assets/images/small.png"
+                "large": "drivers/uvc_nvr/assets/images/large.png",
+                "small": "drivers/uvc_nvr/assets/images/small.png"
+            },
+            "pair": [
+                {
+                    "id": "list_devices",
+                    "template": "list_devices",
+                    "navigation": {
+                        "next": "add_devices"
+                    }
+                },
+                {
+                    "id": "add_devices",
+                    "template": "add_devices"
+                }
+            ]
+        },
+        {
+            "id": "uvc_g3",
+            "class": "other",
+            "capabilities": [],
+            "name": {
+                "en": "UVC-G3"
+            },
+            "images": {
+                "large": "drivers/uvc_g3/assets/images/large.png",
+                "small": "drivers/uvc_g3/assets/images/small.png"
             },
             "pair": [
                 {
