@@ -109,5 +109,84 @@
                 }
             ]
         }
-    ]
+    ],
+    "flow": {
+        "triggers": [
+            {
+                "id": "snapshot_created",
+                "title": {
+                    "en": "A snapshot was created",
+                    "nl": "Er is een snapshot gemaakt"
+                },
+                "tokens": [
+                    {
+                        "name": "snapshot_token",
+                        "title": {
+                            "en": "Snapshot",
+                            "nl": "Momentopname"
+                        },
+                        "type": "string"
+                    }
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "id": "take_snapshot_nvr",
+                "title": {
+                    "en": "Take a snapshot",
+                    "nl": "Maak een momentopname"
+                },
+                "args": [
+                    {
+                        "name": "camera",
+                        "type": "autocomplete",
+                        "placeholder": {
+                            "en": "Which camera",
+                            "nl": "Welke camera"
+                        },
+                        "filter": "driver_id=uvc_nvr"
+                    },
+                    {
+                        "name": "width",
+                        "type": "number",
+                        "min": 0,
+                        "max": 1920,
+                        "placeholder": {
+                            "en": "Width in pixels",
+                            "nl": "Breedte in pixels"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "take_snapshot_camera",
+                "title": {
+                    "en": "Take a snapshot",
+                    "nl": "Maak een momentopname"
+                },
+                "args": [
+                    {
+                        "name": "camera",
+                        "type": "device",
+                        "placeholder": {
+                            "en": "Which camera",
+                            "nl": "Welke camera"
+                        },
+                        "filter": "driver_id=uvc_g3"
+                    },
+                    {
+                        "name": "width",
+                        "type": "number",
+                        "min": 0,
+                        "max": 1920,
+                        "placeholder": {
+                            "en": "Width in pixels",
+                            "nl": "Breedte in pixels"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 }

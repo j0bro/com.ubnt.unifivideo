@@ -1,7 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
-const UnifiDeviceDiscovery = require('../../lib/UnifiDeviceDiscovery');
+const UnifiDeviceDiscovery = require('../../lib/discovery');
 
 class UvcNvrDriver extends Homey.Driver {
 
