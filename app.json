@@ -125,7 +125,7 @@
                             "en": "Snapshot",
                             "nl": "Momentopname"
                         },
-                        "type": "string"
+                        "type": "image"
                     }
                 ]
             }

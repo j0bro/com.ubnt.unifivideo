@@ -9,21 +9,27 @@ class UvcNvrDriver extends Homey.Driver {
         if (device && device.platform === 'UniFi Video') {
             this.log('Found: ' + device.hostname, '@', device.ip);
 
-            this._found.push(device);
+            if (!this._found.hasOwnProperty(device.ip)) {
+                this._found[device.ip] = device;
+                this._devices.push(device);
+            }
         }
     }
 
     onPair(socket) {
+        this.log('onPair');
+
+        this._found = {};
+        this._devices = [];
+
         socket.on('list_devices', (data, callback) => {
-            callback(null, this._found.map(device => (
+            callback(null, this._devices.map(device => (
                 {
                     name: device.hostname,
                     data: device
                 }
             )));
         });
-
-        this._found = [];
 
         this._discovery = new UnifiDeviceDiscovery();
         this._discovery.on('device', this._onDevice.bind(this));
