@@ -126,6 +126,13 @@
                             "nl": "Momentopname"
                         },
                         "type": "image"
+                    },
+                    {
+                        "name": "snapshot_camera",
+                        "title": {
+                            "en": "Camera"                            
+                        },
+                        "type": "string"
                     }
                 ]
             }

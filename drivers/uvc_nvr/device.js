@@ -1,8 +1,6 @@
 'use strict';
 
 const Homey = require('homey');
-const fs = require('fs');
-const path = require('path');
 
 class UvcNvr extends Homey.Device {
 
@@ -14,7 +12,11 @@ class UvcNvr extends Homey.Device {
         new Homey.FlowCardAction('take_snapshot_nvr')
             .register()
             .registerRunListener((args, state) => {
-                this.takeSnapshot(args.camera._id, args.width);
+                let camera = {
+                    id: args.camera._id,
+                    name: args.camera.name
+                };
+                this.takeSnapshot(camera, args.width);
 
                 return Promise.resolve(true);
             })
@@ -25,11 +27,10 @@ class UvcNvr extends Homey.Device {
     }
 
     onAdded() {
-	this.log('onAdded');
-
         this._get('sysinfo')
             .then((response) => {
                 this._systemInfo = JSON.parse(response).data[0];
+
                 this.log('UVC-NVR version: ' + this._systemInfo.version
                     + ', running on: ' + this._systemInfo.platform);
             });
@@ -37,6 +38,7 @@ class UvcNvr extends Homey.Device {
         this._get('server')
             .then((response) => {
                 this._server = JSON.parse(response).data[0];
+
                 this.log('Server name: ' + this._server.name
                     + ', model: ' + this._server.model
                     + ', address: ' + this._server.host);
@@ -44,12 +46,11 @@ class UvcNvr extends Homey.Device {
 
         this._get('camera')
             .then((response) => {
-		this.log('cameras: ', response);
-
                 this._cameras = JSON.parse(response).data;
 
                 for (let i = 0; i < this._cameras.length; i++) {
                     let camera = this._cameras[i];
+
                     this.log('Camera name: ' + camera.name
                         + ', model: ' + camera.model
                         + ', address: ' + camera.host);
@@ -57,7 +58,7 @@ class UvcNvr extends Homey.Device {
             });
     }
 
-    takeSnapshot(cameraId, widthInPixels) {
+    takeSnapshot(camera, widthInPixels) {
         let params = {
             'force': true
         };
@@ -66,28 +67,20 @@ class UvcNvr extends Homey.Device {
             params.width = widthInPixels;
         }
 
-        this._get('snapshot/camera/' + cameraId, params)
-            .then((imgData) => {
-		this.log('got image data!');
-                this._onSnapshot(imgData);
+        this._get('snapshot/camera/' + camera.id, params)
+            .then((buffer) => {
+                this._onSnapshot(camera.name, buffer);
             })
             .catch((error) => console.error(error));
     }
 
-    _onSnapshot(buffer) {
-        this.log('buffer size:', buffer.length);
+    _onSnapshot(cameraName, buffer) {
         let img = new Homey.Image('jpg');
 
         img.setBuffer(buffer);
-
-	img.getBuffer()
-	    .then((buf) => {
-	        fs.writefile(path.join(__dirname, 'userdata', 'snapshot.jpg'), buf);
-	    });
-
         img.register()
             .then(() => {
-                let snapshotToken = new Homey.FlowToken('snapshot_token', {
+                let snapshotToken = new Homey.FlowToken('snapshot-' + ++this._snapshotCount, {
                     type: 'image',
                     title: 'Snapshot'
                 });
@@ -95,21 +88,16 @@ class UvcNvr extends Homey.Device {
                 snapshotToken
                     .register()
                     .then(() => {
-                        this.log('registered snapshot token');
-
-                        snapshotToken.setValue(jpeg)
-                            .then(this.log.bind(this, 'token.setValue success'))
-                            .catch(this.error.bind(this, 'token.setValue error'));
+                        snapshotToken.setValue(img);
                     })
                     .catch(this.error.bind(this, 'token.register'));
 
                 new Homey.FlowCardTrigger('snapshot_created')
                     .register()
                     .trigger({
-                        'snapshot_token': img
-		    })
-                    .then(this.log.bind(this, 'snapshot_created.trigger success'))
-                    .catch(this.error.bind(this, 'snapshot_created.trigger error'));
+                        'snapshot_token': img,
+                        'snapshot_camera': cameraName
+                    });
             })
             .catch(this.error.bind(this, 'snapshot.register'));
     }
@@ -123,7 +111,6 @@ class UvcNvr extends Homey.Device {
         }
 
         let url = 'http://' + this._data.ip + ':7080/api/2.0/' + endpoint + queryString;
-        this.log('Requesting:', url);
 
         return new Promise((resolve, reject) => {
             const lib = url.startsWith('https') ? require('https') : require('http');
