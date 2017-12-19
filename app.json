@@ -130,9 +130,10 @@
                     {
                         "name": "snapshot_camera",
                         "title": {
-                            "en": "Camera"                            
+                            "en": "Camera"
                         },
-                        "type": "string"
+                        "type": "string",
+                        "example": "Driveway"
                     }
                 ]
             }
