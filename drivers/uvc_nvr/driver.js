@@ -9,10 +9,11 @@ class UvcNvrDriver extends Homey.Driver {
         if (device && device.platform === 'UniFi Video') {
             this.log('Found: ' + device.hostname, '@', device.ip);
 
-            if (!this._found.hasOwnProperty(device.ip)) {
-                this._found[device.ip] = device;
-                this._devices.push(device);
+            if (this._found.hasOwnProperty(device.mac)) {
+                return;
             }
+            this._found[device.mac] = device;
+            this._devices.push(device);
         }
     }
 

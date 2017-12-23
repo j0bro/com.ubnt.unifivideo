@@ -5,18 +5,13 @@ const Homey = require('homey');
 class UvcNvr extends Homey.Device {
 
     onInit() {
-        this._snapshotCount = 0;
         this._apiKey = Homey.ManagerSettings.get('unifi_video_apikey') || '';
         this._data = this.getData();
 
         new Homey.FlowCardAction('take_snapshot_nvr')
             .register()
             .registerRunListener((args, state) => {
-                let camera = {
-                    id: args.camera._id,
-                    name: args.camera.name
-                };
-                this.takeSnapshot(camera, args.width);
+                this.takeSnapshot(args.camera.mac, args.width);
 
                 return Promise.resolve(true);
             })
@@ -58,7 +53,7 @@ class UvcNvr extends Homey.Device {
             });
     }
 
-    takeSnapshot(camera, widthInPixels) {
+    takeSnapshot(macAddr, widthInPixels) {
         let params = {
             'force': true
         };
@@ -67,20 +62,31 @@ class UvcNvr extends Homey.Device {
             params.width = widthInPixels;
         }
 
-        this._get('snapshot/camera/' + camera.id, params)
+        let camera = this._getCamera(macAddr);
+
+        this._get('snapshot/camera/' + camera._id, params)
             .then((buffer) => {
-                this._onSnapshot(camera.name, buffer);
+                this._onSnapshot(camera, buffer);
             })
             .catch((error) => console.error(error));
     }
 
-    _onSnapshot(cameraName, buffer) {
+    _getCamera(macAddr) {
+        for (var i = 0; i < this._cameras.length; i++) {
+            let camera = this._cameras[i];
+
+            if (camera.mac === macAddr) return camera;
+        }
+        throw 'Invalid camera MAC.';
+    }
+
+    _onSnapshot(camera, buffer) {
         let img = new Homey.Image('jpg');
 
         img.setBuffer(buffer);
         img.register()
             .then(() => {
-                let snapshotToken = new Homey.FlowToken('snapshot-' + ++this._snapshotCount, {
+                let snapshotToken = new Homey.FlowToken('unifi_snapshot', {
                     type: 'image',
                     title: 'Snapshot'
                 });
@@ -96,7 +102,7 @@ class UvcNvr extends Homey.Device {
                     .register()
                     .trigger({
                         'snapshot_token': img,
-                        'snapshot_camera': cameraName
+                        'snapshot_camera': camera.name
                     });
             })
             .catch(this.error.bind(this, 'snapshot.register'));
