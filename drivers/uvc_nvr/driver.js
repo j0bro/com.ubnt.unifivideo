@@ -18,8 +18,6 @@ class UvcNvrDriver extends Homey.Driver {
     }
 
     onPair(socket) {
-        this.log('onPair');
-
         this._found = {};
         this._devices = [];
 

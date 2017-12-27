@@ -62,22 +62,30 @@ class UvcNvr extends Homey.Device {
             params.width = widthInPixels;
         }
 
-        let camera = this._getCamera(macAddr);
-
-        this._get('snapshot/camera/' + camera._id, params)
-            .then((buffer) => {
-                this._onSnapshot(camera, buffer);
+        this._findCamera(macAddr)
+            .then((camera) => {
+                this._getBinary('snapshot/camera/' + camera._id, params)
+                    .then(buffer => this._onSnapshot(camera, buffer))
+                    .catch(this.error.bind(this, 'snapshot.getbinary'));
             })
-            .catch((error) => console.error(error));
+            .catch(this.error.bind(this, 'camera.find'));
     }
 
-    _getCamera(macAddr) {
-        for (var i = 0; i < this._cameras.length; i++) {
-            let camera = this._cameras[i];
+    _findCamera(macAddr) {
+        return new Promise((resolve, reject) => {
+            if (!this._cameras) {
+                reject('No cameras available.');
+            }
 
-            if (camera.mac === macAddr) return camera;
-        }
-        throw 'Invalid camera MAC.';
+            for (var i = 0; i < this._cameras.length; i++) {
+                let camera = this._cameras[i];
+
+                if (camera.mac === macAddr) {
+                    resolve(camera);
+                }
+            }
+            reject('No camera found with MAC address: ' + macAddr);
+        });
     }
 
     _onSnapshot(camera, buffer) {
@@ -86,15 +94,15 @@ class UvcNvr extends Homey.Device {
         img.setBuffer(buffer);
         img.register()
             .then(() => {
-                let snapshotToken = new Homey.FlowToken('unifi_snapshot', {
+                let token = new Homey.FlowToken('unifi_video_snapshot', {
                     type: 'image',
                     title: 'Snapshot'
                 });
 
-                snapshotToken
+                token
                     .register()
                     .then(() => {
-                        snapshotToken.setValue(img);
+                        token.setValue(img);
                     })
                     .catch(this.error.bind(this, 'token.register'));
 
@@ -108,7 +116,7 @@ class UvcNvr extends Homey.Device {
             .catch(this.error.bind(this, 'snapshot.register'));
     }
 
-    _get(endpoint, params) {
+    _get(endpoint, params, isBinary = false) {
         let queryString = '?apiKey=' + this._apiKey;
 
         for (var key in params) {
@@ -129,10 +137,20 @@ class UvcNvr extends Homey.Device {
                 let data = [];
 
                 response.on('data', (chunk) => data.push(chunk));
-                response.on('end', () => resolve(Buffer.concat(data)));
+                response.on('end', () => {
+                    if (isBinary) {
+                        resolve(Buffer.concat(data));
+                    } else {
+                        resolve(data.join(''));
+                    }
+                });
             });
             request.on('error', (err) => reject(err));
         });
+    }
+
+    _getBinary(endpoint, params) {
+        return this._get(endpoint, params, true);
     }
 }
 
