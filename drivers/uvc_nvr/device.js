@@ -8,20 +8,6 @@ class UvcNvr extends Homey.Device {
         this._apiKey = Homey.ManagerSettings.get('unifi_video_apikey') || '';
         this._data = this.getData();
 
-        new Homey.FlowCardAction('take_snapshot_nvr')
-            .register()
-            .registerRunListener((args, state) => {
-                this.takeSnapshot(args.camera.mac, args.width);
-
-                return Promise.resolve(true);
-            })
-            .getArgument('camera')
-            .registerAutocompleteListener((query, args) => {
-                return this._cameras;
-            });
-    }
-
-    onAdded() {
         this._get('sysinfo')
             .then((response) => {
                 this._systemInfo = JSON.parse(response).data[0];
@@ -50,6 +36,18 @@ class UvcNvr extends Homey.Device {
                         + ', model: ' + camera.model
                         + ', address: ' + camera.host);
                 }
+            });
+
+        new Homey.FlowCardAction('take_snapshot_nvr')
+            .register()
+            .registerRunListener((args, state) => {
+                this.takeSnapshot(args.camera.mac, args.width);
+
+                return Promise.resolve(true);
+            })
+            .getArgument('camera')
+            .registerAutocompleteListener((query, args) => {
+                return this._cameras;
             });
     }
 
@@ -94,17 +92,7 @@ class UvcNvr extends Homey.Device {
         img.setBuffer(buffer);
         img.register()
             .then(() => {
-                let token = new Homey.FlowToken('unifi_video_snapshot', {
-                    type: 'image',
-                    title: 'Snapshot'
-                });
-
-                token
-                    .register()
-                    .then(() => {
-                        token.setValue(img);
-                    })
-                    .catch(this.error.bind(this, 'token.register'));
+                Homey.app.snapshotToken.setValue(img);
 
                 new Homey.FlowCardTrigger('snapshot_created')
                     .register()

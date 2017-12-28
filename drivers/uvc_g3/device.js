@@ -5,9 +5,8 @@ const Homey = require('homey');
 class UvcG3 extends Homey.Device {
 
     onInit() {
-        this._snapshotCount = 0;
-        this._apiKey = Homey.ManagerSettings.get('unifi_video_apikey') || '';
         this._data = this.getData();
+        this.log(this._data);
 
         new Homey.FlowCardAction('take_snapshot_camera')
             .register()
