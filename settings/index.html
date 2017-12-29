@@ -6,39 +6,36 @@
 </head>
 
 <body>
-    <h1 data-i18n="settings.title">
-    </h1>
-    <p data-i18n="settings.subtitle">
-    </p>
+    <h1 data-i18n="settings.title"></h1>
 
     <fieldset>
-        <legend>UniFi Video Settings</legend>
+        <legend data-i18n="settings.title"></legend>
+
+        <div class="field row">
+            <label for="ufv_apikey" data-i18n="settings.apikey"></label>
+            <input id="ufv_apikey" type="text" value="" />
+        </div>
+
+        <button id="apply" class="right" data-i18n="settings.apply"></button>
     </fieldset>
-
-    <div class="field row">
-        <label for="apikey">API key</label>
-        <input id="apikey" type="text" value="" />
-    </div>
-
-    <button id="save" class="right">Save changes</button>
 
     <script type="text/javascript">
 
         function onHomeyReady(Homey) {
             Homey.ready();
 
-            var apiKeyElement = document.getElementById('apikey');
-            var saveElement = document.getElementById('save');
+            var apiKeyElement = document.getElementById('ufv_apikey');
+            var saveElement = document.getElementById('apply');
 
-            Homey.get('unifi_video_apikey', function (err, unifiVideoApiKey) {
+            Homey.get('ufv_apikey', function (err, apiKey) {
                 if (err) {
                     return Homey.alert(err);
                 }
-                apiKeyElement.value = unifiVideoApiKey;
+                apiKeyElement.value = apiKey;
             });
 
             saveElement.addEventListener('click', function (e) {
-                Homey.set('unifi_video_apikey', apiKeyElement.value, function (err) {
+                Homey.set('ufv_apikey', apiKeyElement.value, function (err) {
                     if (err) {
                         return Homey.alert(err);
                     }

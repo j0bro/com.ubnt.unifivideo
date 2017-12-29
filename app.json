@@ -60,31 +60,6 @@
     },
     "drivers": [
         {
-            "id": "uvc_nvr",
-            "class": "other",
-            "capabilities": [],
-            "name": {
-                "en": "UVC-NVR"
-            },
-            "images": {
-                "large": "drivers/uvc_nvr/assets/images/large.png",
-                "small": "drivers/uvc_nvr/assets/images/small.png"
-            },
-            "pair": [
-                {
-                    "id": "list_devices",
-                    "template": "list_devices",
-                    "navigation": {
-                        "next": "add_devices"
-                    }
-                },
-                {
-                    "id": "add_devices",
-                    "template": "add_devices"
-                }
-            ]
-        },
-        {
             "id": "uvc_g3",
             "class": "other",
             "capabilities": [],
@@ -113,74 +88,46 @@
     "flow": {
         "triggers": [
             {
-                "id": "snapshot_created",
+                "id": "ufv_snapshot_created",
                 "title": {
                     "en": "A snapshot was created",
                     "nl": "Er is een snapshot gemaakt"
                 },
                 "tokens": [
                     {
-                        "name": "snapshot_token",
+                        "name": "ufv_snapshot_token",
+                        "type": "image",
                         "title": {
                             "en": "Snapshot",
                             "nl": "Momentopname"
-                        },
-                        "type": "image"
+                        }
                     },
                     {
-                        "name": "snapshot_camera",
-                        "title": {
-                            "en": "Camera"
-                        },
+                        "name": "ufv_snapshot_camera",
                         "type": "string",
-                        "example": "Driveway"
+                        "title": {
+                            "en": "Camera",
+                            "nl": "Camera"
+                        },
+                        "example": {
+                            "en": "Front door",
+                            "nl": "Voordeur"
+                        }
                     }
                 ]
             }
         ],
         "actions": [
             {
-                "id": "take_snapshot_nvr",
+                "id": "ufv_take_snapshot",
                 "title": {
                     "en": "Take a snapshot",
                     "nl": "Maak een momentopname"
                 },
                 "args": [
                     {
-                        "name": "camera",
-                        "type": "autocomplete",
-                        "placeholder": {
-                            "en": "Which camera",
-                            "nl": "Welke camera"
-                        },
-                        "filter": "driver_id=uvc_nvr"
-                    },
-                    {
-                        "name": "width",
-                        "type": "number",
-                        "min": 0,
-                        "max": 1920,
-                        "placeholder": {
-                            "en": "Width in pixels",
-                            "nl": "Breedte in pixels"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "take_snapshot_camera",
-                "title": {
-                    "en": "Take a snapshot",
-                    "nl": "Maak een momentopname"
-                },
-                "args": [
-                    {
-                        "name": "camera",
+                        "name": "device",
                         "type": "device",
-                        "placeholder": {
-                            "en": "Which camera",
-                            "nl": "Welke camera"
-                        },
                         "filter": "driver_id=uvc_g3"
                     },
                     {

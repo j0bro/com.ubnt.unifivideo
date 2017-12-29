@@ -2,6 +2,7 @@
     "title": "UniFi Video",
     "settings": {
         "title": "UniFi Video Settings",
-        "subtitle": "You can change the settings here."
+        "apikey": "API key",
+        "apply": "Apply settings"
     }
 }
