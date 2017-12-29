@@ -1,47 +1,54 @@
 'use strict';
 
 const Homey = require('homey');
+const Ufv = Homey.app.ufv;
 
 class UvcNvr extends Homey.Device {
 
     onInit() {
-        this._apiKey = Homey.ManagerSettings.get('unifi_video_apikey') || '';
         this._data = this.getData();
 
-        this._get('sysinfo')
-            .then((response) => {
-                this._systemInfo = JSON.parse(response).data[0];
+        Ufv.on('nvr', () => {
+            Ufv.GetSysInfo()
+                .then(sysinfo => {
+                    this.log('UVC-NVR version: ' + sysinfo.version
+                        + ', running on: ' + sysinfo.platform);
+                })
+                .catch(this.error.bind(this, 'sysinfo'));
 
-                this.log('UVC-NVR version: ' + this._systemInfo.version
-                    + ', running on: ' + this._systemInfo.platform);
-            });
+            Ufv.GetServer()
+                .then(server => {
+                    this.log('Server name: ' + server.name
+                        + ', model: ' + server.model
+                        + ', address: ' + server.host);
+                })
+                .catch(this.error.bind(this, 'server'));
 
-        this._get('server')
-            .then((response) => {
-                this._server = JSON.parse(response).data[0];
+            Ufv.GetCameras()
+                .then(cameras => {
+                    this._cameras = cameras;
 
-                this.log('Server name: ' + this._server.name
-                    + ', model: ' + this._server.model
-                    + ', address: ' + this._server.host);
-            });
+                    for (let i = 0; i < this._cameras.length; i++) {
+                        let camera = this._cameras[i];
 
-        this._get('camera')
-            .then((response) => {
-                this._cameras = JSON.parse(response).data;
-
-                for (let i = 0; i < this._cameras.length; i++) {
-                    let camera = this._cameras[i];
-
-                    this.log('Camera name: ' + camera.name
-                        + ', model: ' + camera.model
-                        + ', address: ' + camera.host);
-                }
-            });
+                        this.log('Camera name: ' + camera.name
+                            + ', model: ' + camera.model
+                            + ', address: ' + camera.host);
+                    }
+                })
+                .catch(this.error.bind(this, 'camera'));
+        });
 
         new Homey.FlowCardAction('take_snapshot_nvr')
             .register()
             .registerRunListener((args, state) => {
-                this.takeSnapshot(args.camera.mac, args.width);
+                let snapshot = (camera, width) => Ufv.Snapshot(camera, width)
+                    .then(buffer => this._onSnapshot(camera, buffer))
+                    .catch(this.error.bind(this, 'snapshot'));
+
+                Ufv.FindCamera(args.camera.mac)
+                    .then(camera => snapshot(camera, args.width))
+                    .catch(this.error.bind(this, 'camera.find'));
 
                 return Promise.resolve(true);
             })
@@ -49,41 +56,6 @@ class UvcNvr extends Homey.Device {
             .registerAutocompleteListener((query, args) => {
                 return this._cameras;
             });
-    }
-
-    takeSnapshot(macAddr, widthInPixels) {
-        let params = {
-            'force': true
-        };
-
-        if (widthInPixels && widthInPixels > 0) {
-            params.width = widthInPixels;
-        }
-
-        this._findCamera(macAddr)
-            .then((camera) => {
-                this._getBinary('snapshot/camera/' + camera._id, params)
-                    .then(buffer => this._onSnapshot(camera, buffer))
-                    .catch(this.error.bind(this, 'snapshot.getbinary'));
-            })
-            .catch(this.error.bind(this, 'camera.find'));
-    }
-
-    _findCamera(macAddr) {
-        return new Promise((resolve, reject) => {
-            if (!this._cameras) {
-                reject('No cameras available.');
-            }
-
-            for (var i = 0; i < this._cameras.length; i++) {
-                let camera = this._cameras[i];
-
-                if (camera.mac === macAddr) {
-                    resolve(camera);
-                }
-            }
-            reject('No camera found with MAC address: ' + macAddr);
-        });
     }
 
     _onSnapshot(camera, buffer) {
@@ -102,43 +74,6 @@ class UvcNvr extends Homey.Device {
                     });
             })
             .catch(this.error.bind(this, 'snapshot.register'));
-    }
-
-    _get(endpoint, params, isBinary = false) {
-        let queryString = '?apiKey=' + this._apiKey;
-
-        for (var key in params) {
-            let entry = '&' + key + '=' + params[key];
-            queryString += entry;
-        }
-
-        let url = 'http://' + this._data.ip + ':7080/api/2.0/' + endpoint + queryString;
-
-        return new Promise((resolve, reject) => {
-            const lib = url.startsWith('https') ? require('https') : require('http');
-
-            const request = lib.get(url, (response) => {
-                if (response.statusCode < 200 || response.statusCode > 299) {
-                    reject(new Error('Failed to load page, status code: ' + response.statusCode));
-                }
-
-                let data = [];
-
-                response.on('data', (chunk) => data.push(chunk));
-                response.on('end', () => {
-                    if (isBinary) {
-                        resolve(Buffer.concat(data));
-                    } else {
-                        resolve(data.join(''));
-                    }
-                });
-            });
-            request.on('error', (err) => reject(err));
-        });
-    }
-
-    _getBinary(endpoint, params) {
-        return this._get(endpoint, params, true);
     }
 }
 
