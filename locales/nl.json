@@ -1,0 +1,8 @@
+{
+    "title": "UniFi Video",
+    "settings": {
+        "title": "UniFi Video instellingen",
+        "apikey": "API-sleutel",
+        "apply": "Toepassen"
+    }
+}
