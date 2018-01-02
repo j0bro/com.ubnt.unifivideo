@@ -37,6 +37,14 @@
         "name": "Jeroen Brosens",
         "email": "j.brosens+athom@gmail.com"
     },
+    "contributors": {
+        "developers": [
+            {
+                "name": "Jeroen Brosens",
+                "email": "j.brosens+athom@gmail.com"
+            }
+        ]
+    },
     "contributing": {
         "donate": {
             "paypal": {
