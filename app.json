@@ -83,8 +83,11 @@
                     "id": "list_devices",
                     "template": "list_devices",
                     "navigation": {
-                        "next": "add_devices"
+                        "next": "enter_apikey"
                     }
+                },
+                {
+                    "id": "enter_apikey"
                 },
                 {
                     "id": "add_devices",

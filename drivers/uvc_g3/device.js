@@ -26,8 +26,8 @@ class UvcG3 extends Homey.Device {
                 return Promise.resolve(true);
             });
 
-        Ufv.on('ufv_nvr', this._updateModel.bind(this));
-        Ufv.on('ufv_apikey', this._updateModel.bind(this));
+        Ufv.on('ufv_discovered_nvr', this._updateModel.bind(this));
+        Ufv.on('ufv_apikey_set', this._updateModel.bind(this));
     }
 
     _updateModel() {

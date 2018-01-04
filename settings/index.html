@@ -8,34 +8,40 @@
 <body>
     <h1 data-i18n="settings.title"></h1>
 
-    <fieldset>
-        <legend data-i18n="settings.title"></legend>
-
-        <div class="field row">
-            <label for="ufv_apikey" data-i18n="settings.apikey"></label>
-            <input id="ufv_apikey" type="text" value="" />
-        </div>
-
-        <button id="apply" class="right" data-i18n="settings.apply"></button>
-    </fieldset>
+    <div class="field row">
+        <label for="ufv_nvr" data-i18n="nvr.description"></label>
+        <input id="ufv_nvr" type="text" value="" readonly="readonly" />
+    </div>
+    <div class="field row">
+        <label for="ufv_apikey" data-i18n="settings.apikey"></label>
+        <input id="ufv_apikey" type="text" value="" />
+    </div>
+    <button id="apply" class="right" data-i18n="settings.apply"></button>
 
     <script type="text/javascript">
-
         function onHomeyReady(Homey) {
             Homey.ready();
 
-            var apiKeyElement = document.getElementById('ufv_apikey');
-            var saveElement = document.getElementById('apply');
+            var txtNvr = document.getElementById('ufv_nvr');
+            var txtApiKey = document.getElementById('ufv_apikey');
+            var btnApply = document.getElementById('apply');
 
-            Homey.get('ufv_apikey', function (err, apiKey) {
+            Homey.get('ufv_nvr', function (err, nvr) {
                 if (err) {
                     return Homey.alert(err);
                 }
-                apiKeyElement.value = apiKey;
+                txtNvr.value = nvr.ip;
             });
 
-            saveElement.addEventListener('click', function (e) {
-                Homey.set('ufv_apikey', apiKeyElement.value, function (err) {
+            Homey.get('ufv_apikey', function (err, apikey) {
+                if (err) {
+                    return Homey.alert(err);
+                }
+                txtApiKey.value = apikey;
+            });
+
+            btnApply.addEventListener('click', function (e) {
+                Homey.set('ufv_apikey', txtApiKey.value, function (err) {
                     if (err) {
                         return Homey.alert(err);
                     }

@@ -24,5 +24,11 @@ Adds support for Ubiquiti UniFi Video cameras in Homey.
 
 ## Changelog
 
+### 0.9.1
+Resolved issues:
+* Device pairing wizard doesn't ask the user for the API key ([#1][i1])
+
+[i1]: https://github.com/j0bro/com.ubnt.unifivideo/issues/1
+
 ### 0.9.0
 Initial beta release. If you find a bug, please [create an issue here](https://github.com/j0bro/com.ubnt.unifivideo/issues).
