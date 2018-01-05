@@ -1,20 +1,22 @@
 'use strict';
 
 const Homey = require('homey');
-const UfvDiscovery = require('../../lib/ufvdiscovery');
+const UfvApi = require('../../lib/ufvapi');
 
 class UvcG3Driver extends Homey.Driver {
 
-    _onDevice(device) {
-        if (device && device.platform === 'UVC G3') {
-            this.log('Found: ' + device.hostname, '@', device.ip);
+    onInit() {
+        this._ufv = new UfvApi();
 
+        this._ufv.on('ufv_discovered_uvc_g3', device => {
             if (this._found.hasOwnProperty(device.mac)) {
                 return;
             }
             this._found[device.mac] = device;
             this._devices.push(device);
-        }
+
+            this.log('Added: ' + device.hostname, '@', device.ip);
+        });
     }
 
     onPair(socket) {
@@ -30,9 +32,19 @@ class UvcG3Driver extends Homey.Driver {
             )));
         });
 
-        this._discovery = new UfvDiscovery();
-        this._discovery.on('device', this._onDevice.bind(this));
-        this._discovery.start();
+        socket.on('ufv_apikey_submit', (data, callback) => {
+            Homey.ManagerSettings.set('ufv_apikey', data.apikey);
+            this._ufv.SetApiKey(data.apikey);
+
+            callback(null, 'API key set.');
+        });
+
+        this._ufv.on('ufv_discovered_nvr', nvr => {
+            Homey.ManagerSettings.set('ufv_nvr', nvr);
+            socket.emit('ufv_nvr', nvr);
+        });
+
+        this._ufv.Discover();
     }
 }
 

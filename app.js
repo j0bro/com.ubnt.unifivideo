@@ -8,6 +8,7 @@ class UniFiVideo extends Homey.App {
     onInit() {
         this.ufv = new UfvApi();
         this.ufv.SetApiKey(Homey.ManagerSettings.get('ufv_apikey') || '');
+        this.ufv.Discover();
 
         this.snapshotToken = new Homey.FlowToken('ufv_snapshot', {
             type: 'image',

@@ -1,0 +1,53 @@
+<body>
+    <ol>
+        <li data-i18n="pair.step1"></li>
+        <li data-i18n="pair.step2"></li>
+        <li data-i18n="pair.step3"></li>
+        <li data-i18n="pair.step4"></li>
+    </ol>
+
+    <p>
+        <!-- Show warning while no NVR is found -->
+        <a href="javascript:void(0);" id="ufv_nvr" style="visibility: hidden" />
+    </p>
+
+    <div class="field row">
+        <label for="ufv_apikey" data-i18n="settings.apikey"></label>
+        <input id="ufv_apikey" type="text" value="" />
+    </div>
+    <div class="field row">
+        <button id="apply" class="right" data-i18n="settings.apply" disabled="disabled"></button>
+    </div>
+
+    <script type="text/javascript">
+        Homey.setTitle(__('pair.title'))
+
+        var linkNvr = document.getElementById('ufv_nvr');
+        var txtApiKey = document.getElementById('ufv_apikey');
+        var btnApply = document.getElementById('apply');
+
+        Homey.on('ufv_nvr', nvr => {
+            let nvrUrl = nvr.webProtocol + '://' + nvr.ip + ':' + nvr.webPort + '/users';
+
+            linkNvr.text = __('pair.nvr_user_settings');
+            linkNvr.onclick = () => Homey.popup(nvrUrl);
+            linkNvr.style.visibility = "visible";
+        });
+
+        txtApiKey.addEventListener('input', event => {
+            btnApply.disabled = txtApiKey.value === '';
+        });
+
+        btnApply.addEventListener('click', event => {
+            // Test API key
+
+            // Submit
+            Homey.emit('ufv_apikey_submit', { 'apikey': txtApiKey.value }, function (err, result) {
+                if (err) {
+                    return Homey.alert(err);
+                }
+                Homey.showView('add_devices');
+            });
+        });
+    </script>
+</body>

@@ -1,5 +1,16 @@
 {
     "title": "UniFi Video",
+    "nvr": {
+        "description": "NVR"
+    },
+    "pair": {
+        "title": "Almost there",
+        "step1": "Use the link below to go to the user settings of the NVR.",
+        "step2": "Select the user which will be used for this Homey app.",
+        "step3": "Go to the 'API access' settings pane and enable 'Allow API Usage'.",
+        "step4": "Copy the 'API Key' and paste it in the box below.",
+        "nvr_user_settings": "Go to the user settings"
+    },
     "settings": {
         "title": "UniFi Video Settings",
         "apikey": "API key",
