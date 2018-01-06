@@ -10,6 +10,12 @@ class UniFiVideo extends Homey.App {
         this.ufv.SetApiKey(Homey.ManagerSettings.get('ufv_apikey') || '');
         this.ufv.Discover();
 
+        Homey.ManagerSettings.on('set', key => {
+            if (key === 'ufv_apikey') {
+                this.ufv.SetApiKey(Homey.ManagerSettings.get('ufv_apikey'));
+            }
+        });
+
         this.snapshotToken = new Homey.FlowToken('ufv_snapshot', {
             type: 'image',
             title: 'Snapshot'
@@ -20,7 +26,6 @@ class UniFiVideo extends Homey.App {
         if (Homey.env.DEBUG) {
             require('inspector').open(9229, '0.0.0.0');
         }
-
         this.log('UniFi Video is running.');
     }
 }

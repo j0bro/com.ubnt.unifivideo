@@ -26,6 +26,25 @@ class UvcG3 extends Homey.Device {
                 return Promise.resolve(true);
             });
 
+        new Homey.FlowCardAction('ufv_set_recording_mode')
+            .register()
+            .registerRunListener((args, state) => {
+                let device = args.device.getData();
+
+                Ufv.FindCamera(device.mac)
+                    .then(camera => {
+                        let isFullTimeEnabled = args.recording_mode === 'always';
+                        let isMotionEnabled = args.recording_mode === 'motion';
+
+                        Ufv.SetRecordingMode(camera, isFullTimeEnabled, isMotionEnabled)
+                            .then(this.log.bind(this, '[recordingmode.set]'))
+                            .catch(this.error.bind(this, '[recordingmode.set]'));
+                    })
+                    .catch(this.error.bind(this, '[camera.find]'));
+
+                return Promise.resolve(true);
+            });
+
         Ufv.on('ufv_discovered_nvr', this._updateModel.bind(this));
         Ufv.on('ufv_apikey_set', this._updateModel.bind(this));
     }
