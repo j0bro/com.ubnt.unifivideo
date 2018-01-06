@@ -31,7 +31,7 @@
         "small": "assets/images/small.png"
     },
     "category": "security",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "compatibility": ">=1.5.0",
     "author": {
         "name": "Jeroen Brosens",
