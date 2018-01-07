@@ -31,7 +31,7 @@
         "small": "assets/images/small.png"
     },
     "category": "security",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "compatibility": ">=1.5.0",
     "author": {
         "name": "Jeroen Brosens",
@@ -129,6 +129,47 @@
             }
         ],
         "actions": [
+            {
+                "id": "ufv_set_recording_mode",
+                "title": {
+                    "en": "Set recording mode",
+                    "nl": "Stel opnamemodus in"
+                },
+                "args": [
+                    {
+                        "name": "device",
+                        "type": "device",
+                        "filter": "driver_id=uvc_g3"
+                    },
+                    {
+                        "name": "recording_mode",
+                        "type": "dropdown",
+                        "values": [
+                            {
+                                "id": "none",
+                                "label": {
+                                    "en": "Don't record",
+                                    "nl": "Niet opnemen"
+                                }
+                            },
+                            {
+                                "id": "always",
+                                "label": {
+                                    "en": "Always record",
+                                    "nl": "Altijd opnemen"
+                                }
+                            },
+                            {
+                                "id": "motion",
+                                "label": {
+                                    "en": "Record only motion",
+                                    "nl": "Alleen beweging opnemen"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
             {
                 "id": "ufv_take_snapshot",
                 "title": {
