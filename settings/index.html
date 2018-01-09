@@ -10,7 +10,7 @@
 
     <div class="field row">
         <label for="ufv_nvr" data-i18n="nvr.description"></label>
-        <input id="ufv_nvr" type="text" value="" readonly="readonly" />
+        <input id="ufv_nvr" type="text" value="" />
     </div>
     <div class="field row">
         <label for="ufv_apikey" data-i18n="settings.apikey"></label>
@@ -41,6 +41,12 @@
             });
 
             btnApply.addEventListener('click', function (e) {
+                Homey.set('ufv_nvr', txtNvr.value, function (err) {
+                    if (err) {
+                        return Homey.alert(err);
+                    }
+                });
+
                 Homey.set('ufv_apikey', txtApiKey.value, function (err) {
                     if (err) {
                         return Homey.alert(err);

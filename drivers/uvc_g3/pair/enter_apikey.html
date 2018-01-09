@@ -42,7 +42,7 @@
             let nvrUrl = nvr.webProtocol + '://' + nvr.ip + ':' + nvr.webPort + '/users';
 
             linkNvr.text = __('pair.nvr_user_settings');
-            linkNvr.onclick = () => Homey.popup(nvrUrl);
+            linkNvr.onclick = () => Homey.popup(nvrUrl, { width: 1024, height: 768 });
             linkNvr.style.visibility = "visible";
         });
     </script>
