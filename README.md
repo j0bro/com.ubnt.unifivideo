@@ -18,9 +18,9 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 5. If the API key has changed in the UniFi Video web interface, it can be updated in the Homey app on the UniFi Video app's Settings page.
 
 ## Usage
-* A flow action card can be used to **create a snapshot**, which is is saved to an Image tag.
-* A flow can be triggered **when a snapshot is created** using the UniFi Video trigger card. This card supplies the name of the camera that created the snapshot and the snapshot image itself.
-* A flow action card is available to **set a camera's recording mode**, being one of 'Don't record', 'Always record' or 'Record only motion'.
+* A flow action card can be used to create a snapshot, which is is saved to an Image tag.
+* A flow can be triggered when a snapshot is created using the UniFi Video trigger card. This card supplies the name of the camera that created the snapshot and the snapshot image itself.
+* A flow action card is available to set a camera's recording mode, being one of 'Don't record', 'Always record' or 'Record only motion'.
 
 ## Troubleshooting
 * I can't seem to create a snapshot:
