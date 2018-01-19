@@ -11,8 +11,13 @@ class UniFiVideo extends Homey.App {
         this.ufv.Discover();
 
         Homey.ManagerSettings.on('set', key => {
-            if (key === 'ufv_apikey') {
-                this.ufv.SetApiKey(Homey.ManagerSettings.get('ufv_apikey'));
+            switch (key) {
+                case 'ufv_apikey':
+                    this.ufv.SetApiKey(Homey.ManagerSettings.get('ufv_apikey'));
+                    break;
+                case 'ufv_nvr_ip':
+                    this.ufv.SetNvrIp(Homey.ManagerSettings.get('ufv_nvr_ip'));
+                    break;
             }
         });
 

@@ -9,8 +9,8 @@
     <h1 data-i18n="settings.title"></h1>
 
     <div class="field row">
-        <label for="ufv_nvr" data-i18n="nvr.description"></label>
-        <input id="ufv_nvr" type="text" value="" />
+        <label for="ufv_nvr_ip" data-i18n="nvr.description"></label>
+        <input id="ufv_nvr_ip" type="text" value="" />
     </div>
     <div class="field row">
         <label for="ufv_apikey" data-i18n="settings.apikey"></label>
@@ -22,7 +22,7 @@
         function onHomeyReady(Homey) {
             Homey.ready();
 
-            var txtNvr = document.getElementById('ufv_nvr');
+            var txtNvrIp = document.getElementById('ufv_nvr_ip');
             var txtApiKey = document.getElementById('ufv_apikey');
             var btnApply = document.getElementById('apply');
 
@@ -30,18 +30,18 @@
                 if (err) {
                     return Homey.alert(err);
                 }
-                txtNvr.value = nvr.ip;
+                txtNvrIp.value = nvr.ip;
             });
 
-            Homey.get('ufv_apikey', function (err, apikey) {
+            Homey.get('ufv_apikey', function (err, apiKey) {
                 if (err) {
                     return Homey.alert(err);
                 }
-                txtApiKey.value = apikey;
+                txtApiKey.value = apiKey;
             });
 
             btnApply.addEventListener('click', function (e) {
-                Homey.set('ufv_nvr', txtNvr.value, function (err) {
+                Homey.set('ufv_nvr_ip', txtNvrIp.value, function (err) {
                     if (err) {
                         return Homey.alert(err);
                     }
