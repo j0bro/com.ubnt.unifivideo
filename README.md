@@ -30,9 +30,11 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 
 ## Changelog
 
-### Version 0.9.1
-Resolved issues/new features:
+### Version 0.9.2
+* NVR can't be discovered if it's on a different subnet than Homey ([#5][i5])
+* UVC G3 Dome camera can't be discovered ([#6][i6])
 
+### Version 0.9.1
 * Device pairing wizard doesn't ask the user for the API key ([#1][i1])
 * Add support for controlling recording mode ([#2][i2])
 
@@ -44,3 +46,5 @@ If you find a bug or if you are missing a feature, please [create an issue here]
 
 [i1]: https://github.com/j0bro/com.ubnt.unifivideo/issues/1
 [i2]: https://github.com/j0bro/com.ubnt.unifivideo/issues/2
+[i5]: https://github.com/j0bro/com.ubnt.unifivideo/issues/5
+[i6]: https://github.com/j0bro/com.ubnt.unifivideo/issues/6
