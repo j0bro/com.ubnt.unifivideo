@@ -11,10 +11,9 @@ const UFV_NVR_UPDATED = 'ufv_nvr_updated';
 class UniFiVideo extends Homey.App {
 
     onInit() {
-        this.ufv = new UfvApi();
-        this.ufv.on(UFV_NVR_UPDATED, nvr => {
-            Homey.ManagerSettings.set(UFV_NVR, nvr);
-        });
+        this.ufv = new UfvApi();        
+        this.ufv.on(UFV_NVR_UPDATED, nvr => Homey.ManagerSettings.set(UFV_NVR, nvr));
+        this.ufv.Discover();
 
         Homey.ManagerSettings.on('set', key => {
             switch (key) {
