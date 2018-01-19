@@ -30,7 +30,11 @@
         "large": "assets/images/large.png",
         "small": "assets/images/small.png"
     },
-    "category": "security",
+    "category": [
+        "appliances",
+        "security",
+        "video"
+    ],
     "version": "0.9.1",
     "compatibility": ">=1.5.0",
     "author": {
