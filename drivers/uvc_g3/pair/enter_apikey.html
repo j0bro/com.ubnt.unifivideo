@@ -7,7 +7,7 @@
     </ol>
 
     <p>
-        <a href="javascript:void(0);" id="ufv_nvr" style="visibility: hidden" />
+        <a href="javascript:void(0);" id="link_to_nvr" style="visibility: hidden" />
     </p>
 
     <div class="field row">
@@ -21,7 +21,7 @@
     <script type="text/javascript">
         Homey.setTitle(__('pair.title'))
 
-        var linkNvr = document.getElementById('ufv_nvr');
+        var linkNvr = document.getElementById('link_to_nvr');
         var txtApiKey = document.getElementById('ufv_apikey');
         var btnApply = document.getElementById('apply');
 
@@ -38,12 +38,21 @@
             });
         });
 
-        Homey.on('ufv_nvr', nvr => {
+        Homey.on('api_key_set', apikey => {
+            console.log('[PAIR] API key set.');
+
+            Homey.showView('add_devices');
+        });
+
+        Homey.on('ufv_nvr_set', nvr => {
+            console.log('[PAIR] NVR set.');
+
             let nvrUrl = nvr.webProtocol + '://' + nvr.ip + ':' + nvr.webPort + '/users';
 
             linkNvr.text = __('pair.nvr_user_settings');
-            linkNvr.onclick = () => Homey.popup(nvrUrl);
+            linkNvr.onclick = () => Homey.popup(nvrUrl, { width: 1024, height: 768 });
             linkNvr.style.visibility = "visible";
         });
+
     </script>
 </body>

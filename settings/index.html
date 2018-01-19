@@ -9,8 +9,8 @@
     <h1 data-i18n="settings.title"></h1>
 
     <div class="field row">
-        <label for="ufv_nvr" data-i18n="nvr.description"></label>
-        <input id="ufv_nvr" type="text" value="" readonly="readonly" />
+        <label for="ufv_nvr_ip" data-i18n="nvr.description"></label>
+        <input id="ufv_nvr_ip" type="text" value="" />
     </div>
     <div class="field row">
         <label for="ufv_apikey" data-i18n="settings.apikey"></label>
@@ -19,34 +19,60 @@
     <button id="apply" class="right" data-i18n="settings.apply"></button>
 
     <script type="text/javascript">
+        var txtNvrIp = document.getElementById('ufv_nvr_ip');
+        var txtApiKey = document.getElementById('ufv_apikey');
+        var btnApply = document.getElementById('apply');
+
         function onHomeyReady(Homey) {
             Homey.ready();
 
-            var txtNvr = document.getElementById('ufv_nvr');
-            var txtApiKey = document.getElementById('ufv_apikey');
-            var btnApply = document.getElementById('apply');
-
-            Homey.get('ufv_nvr', function (err, nvr) {
-                if (err) {
-                    return Homey.alert(err);
-                }
-                txtNvr.value = nvr.ip;
-            });
-
-            Homey.get('ufv_apikey', function (err, apikey) {
-                if (err) {
-                    return Homey.alert(err);
-                }
-                txtApiKey.value = apikey;
-            });
-
-            btnApply.addEventListener('click', function (e) {
-                Homey.set('ufv_apikey', txtApiKey.value, function (err) {
+            function getValues() {
+                Homey.get('ufv_nvr', function (err, nvr) {
                     if (err) {
                         return Homey.alert(err);
                     }
+
+                    if (nvr) {
+                        txtNvrIp.value = nvr.ip;
+                    } else {
+                        console.log('[SETTINGS] NVR unavailable.');
+                    }
                 });
+
+                Homey.get('ufv_apikey', function (err, apiKey) {
+                    if (err) {
+                        return Homey.alert(err);
+                    }
+
+                    if (apiKey) {
+                        txtApiKey.value = apiKey;
+                    } else {
+                        console.log('[SETTINGS] API key unavailable.');
+                    }
+                });
+            }
+
+            function setValues() {
+                Homey.set('ufv_nvr_ip', txtNvrIp.value, function (err, result) {
+                    if (err) {
+                        return Homey.alert(err);
+                    }
+                    console.log('[SETTINGS] NVR ip set: ' + result);
+                });
+
+                Homey.set('ufv_apikey', txtApiKey.value, function (err, result) {
+                    if (err) {
+                        return Homey.alert(err);
+                    }
+                    console.log('[SETTINGS] API key set: ' + result);
+                });
+            }
+
+            btnApply.addEventListener('click', function (e) {
+                setValues();
             });
+
+            getValues();
         }
     </script>
 </body>

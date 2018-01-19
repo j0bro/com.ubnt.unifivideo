@@ -18,9 +18,9 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 5. If the API key has changed in the UniFi Video web interface, it can be updated in the Homey app on the UniFi Video app's Settings page.
 
 ## Usage
-* A flow action card can be used to **create a snapshot**, which is is saved to an Image tag.
-* A flow can be triggered **when a snapshot is created** using the UniFi Video trigger card. This card supplies the name of the camera that created the snapshot and the snapshot image itself.
-* A flow action card is available to **set a camera's recording mode**, being one of 'Don't record', 'Always record' or 'Record only motion'.
+* A flow action card can be used to create a snapshot, which is is saved to an Image tag.
+* A flow can be triggered when a snapshot is created using the UniFi Video trigger card. This card supplies the name of the camera that created the snapshot and the snapshot image itself.
+* A flow action card is available to set a camera's recording mode, being one of 'Don't record', 'Always record' or 'Record only motion'.
 
 ## Troubleshooting
 * I can't seem to create a snapshot:
@@ -30,9 +30,11 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 
 ## Changelog
 
-### Version 0.9.1
-Resolved issues/new features:
+### Version 0.9.2
+* NVR can't be discovered if it's on a different subnet than Homey ([#5][i5])
+* UVC G3 Dome camera can't be discovered ([#6][i6])
 
+### Version 0.9.1
 * Device pairing wizard doesn't ask the user for the API key ([#1][i1])
 * Add support for controlling recording mode ([#2][i2])
 
@@ -44,3 +46,5 @@ If you find a bug or if you are missing a feature, please [create an issue here]
 
 [i1]: https://github.com/j0bro/com.ubnt.unifivideo/issues/1
 [i2]: https://github.com/j0bro/com.ubnt.unifivideo/issues/2
+[i5]: https://github.com/j0bro/com.ubnt.unifivideo/issues/5
+[i6]: https://github.com/j0bro/com.ubnt.unifivideo/issues/6
