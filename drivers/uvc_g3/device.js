@@ -53,7 +53,7 @@ class UvcG3 extends Homey.Device {
         Ufv.GetSysInfo()
             .then(sysinfo => {
                 if (Homey.env.DEBUG) {
-                    this.log('UVC-NVR found running UniFi Video version: ' + sysinfo.version);
+                    this.log('[DEVICE] UVC-NVR found running UniFi Video version: ' + sysinfo.version);
                 }
             })
             .catch(this.error.bind(this, '[sysinfo]'));
@@ -61,7 +61,7 @@ class UvcG3 extends Homey.Device {
         Ufv.GetServer()
             .then(server => {
                 if (Homey.env.DEBUG) {
-                    this.log('Server name: ' + server.name + ', address: ' + server.host);
+                    this.log('[DEVICE] Server name: ' + server.name + ', address: ' + server.host);
                 }
             })
             .catch(this.error.bind(this, '[server]'));
@@ -74,7 +74,7 @@ class UvcG3 extends Homey.Device {
                     for (let i = 0; i < this._cameras.length; i++) {
                         let camera = this._cameras[i];
 
-                        this.log('Camera name: ' + camera.name
+                        this.log('[DEVICE] Camera name: ' + camera.name
                             + ', model: ' + camera.model
                             + ', address: ' + camera.host);
                     }
