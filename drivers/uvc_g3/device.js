@@ -1,23 +1,24 @@
 'use strict';
 
 const Homey = require('homey');
-const Ufv = Homey.app.ufv;
+const Api = Homey.app.api;
+const UfvConstants = require('../../lib/ufvconstants');
 
 class UvcG3 extends Homey.Device {
 
     onInit() {
         this._data = this.getData();
 
-        this._snapshotTrigger = new Homey.FlowCardTrigger('ufv_snapshot_created');
+        this._snapshotTrigger = new Homey.FlowCardTrigger(UfvConstants.EVENT_SNAPSHOT_CREATED);
         this._snapshotTrigger.register();
 
-        new Homey.FlowCardAction('ufv_take_snapshot')
+        new Homey.FlowCardAction(UfvConstants.ACTION_TAKE_SNAPSHOT)
             .register()
-            .registerRunListener((args, state) => {
+            .registerRunListener((args, state) => { // eslint-disable-line no-unused-vars
                 let device = args.device.getData();
 
-                Ufv.FindCamera(device.mac)
-                    .then(camera => Ufv.Snapshot(camera, args.width)
+                Api.FindCamera(device.mac)
+                    .then(camera => Api.Snapshot(camera, args.width)
                         .then(buffer => this._onSnapshotBuffer(camera, buffer))
                         .catch(this.error.bind(this, '[snapshot.buffer]'))
                     )
@@ -26,17 +27,17 @@ class UvcG3 extends Homey.Device {
                 return Promise.resolve(true);
             });
 
-        new Homey.FlowCardAction('ufv_set_recording_mode')
+        new Homey.FlowCardAction(UfvConstants.ACTION_SET_RECORDING_MODE)
             .register()
-            .registerRunListener((args, state) => {
+            .registerRunListener((args, state) => { // eslint-disable-line no-unused-vars
                 let device = args.device.getData();
 
-                Ufv.FindCamera(device.mac)
+                Api.FindCamera(device.mac)
                     .then(camera => {
                         let isFullTimeEnabled = args.recording_mode === 'always';
                         let isMotionEnabled = args.recording_mode === 'motion';
 
-                        Ufv.SetRecordingMode(camera, isFullTimeEnabled, isMotionEnabled)
+                        Api.SetRecordingMode(camera, isFullTimeEnabled, isMotionEnabled)
                             .then(this.log.bind(this, '[recordingmode.set]'))
                             .catch(this.error.bind(this, '[recordingmode.set]'));
                     })
@@ -45,12 +46,12 @@ class UvcG3 extends Homey.Device {
                 return Promise.resolve(true);
             });
 
-        Ufv.on('ufv_discovered_nvr', this._updateModel.bind(this));
-        Ufv.on('ufv_apikey_set', this._updateModel.bind(this));
+        Api.on(UfvConstants.API_HOST, this._updateModel.bind(this));
+        Api.on(UfvConstants.API_KEY, this._updateModel.bind(this));
     }
 
     _updateModel() {
-        Ufv.GetSysInfo()
+        Api.GetSysInfo()
             .then(sysinfo => {
                 if (Homey.env.DEBUG) {
                     this.log('[DEVICE] UVC-NVR found running UniFi Video version: ' + sysinfo.version);
@@ -58,7 +59,7 @@ class UvcG3 extends Homey.Device {
             })
             .catch(this.error.bind(this, '[sysinfo]'));
 
-        Ufv.GetServer()
+        Api.GetServer()
             .then(server => {
                 if (Homey.env.DEBUG) {
                     this.log('[DEVICE] Server name: ' + server.name + ', address: ' + server.host);
@@ -66,7 +67,7 @@ class UvcG3 extends Homey.Device {
             })
             .catch(this.error.bind(this, '[server]'));
 
-        Ufv.GetCameras()
+        Api.GetCameras()
             .then(cameras => {
                 this._cameras = cameras;
 
