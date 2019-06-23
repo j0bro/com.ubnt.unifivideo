@@ -9,6 +9,8 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 	* UVC-G3
 	* UVC-G3-AF
 	* UVC-G3-DOME
+	* UVC-G3-PRO
+	* UVC-G4-PRO
 
 ## Getting started
 1. Create a user in the UniFi Video web interface that belongs to a group that has permissions `view camera` and `edit camera`.
@@ -29,6 +31,10 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 	* Make sure the UniFi Video user is part of a group that has the `edit camera` permission.
 
 ## Changelog
+
+### Version 0.9.3
+* Add support for UVC-G3-PRO
+* Add support for UVC-G4-PRO
 
 ### Version 0.9.2
 * NVR can't be discovered if it's on a different subnet than Homey ([#5][i5])
