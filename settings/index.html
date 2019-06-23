@@ -27,13 +27,13 @@
             Homey.ready();
 
             function getValues() {
-                Homey.get('ufv:api:host', function (err, apihost) {
+                Homey.get('ufv:api:host', function (err, apiHost) {
                     if (err) {
                         return Homey.alert(err);
                     }
 
-                    if (apihost) {
-                        txtApiHost.value = apihost;
+                    if (apiHost) {
+                        txtApiHost.value = apiHost;
                     } else {
                         console.log('[SETTINGS] API host unavailable.');
                     }

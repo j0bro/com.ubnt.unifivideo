@@ -33,8 +33,10 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 ## Changelog
 
 ### Version 0.9.3
-* Add support for UVC-G3-PRO
-* Add support for UVC-G4-PRO
+* Add support for UVC G3 Flex
+* Add support for UVC G3 Micro
+* Add support for UVC G3 Pro
+* Add support for UVC G4 Pro
 
 ### Version 0.9.2
 * NVR can't be discovered if it's on a different subnet than Homey ([#5][i5])
