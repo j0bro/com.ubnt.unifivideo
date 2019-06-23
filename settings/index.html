@@ -24,8 +24,6 @@
         var btnApply = document.getElementById('apply');
 
         function onHomeyReady(Homey) {
-            Homey.ready();
-
             function getValues() {
                 Homey.get('ufv:api:host', function (err, apiHost) {
                     if (err) {
@@ -73,6 +71,8 @@
             });
 
             getValues();
+            // Get Values must before ready();
+            Homey.ready();
         }
     </script>
 </body>
