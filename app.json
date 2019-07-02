@@ -46,6 +46,10 @@
             {
                 "name": "Jeroen Brosens",
                 "email": "j.brosens+athom@gmail.com"
+            },
+            {
+                "name": "Stèphan Eizinga",
+                "email": "stephan@monkeysoft.nl"
             }
         ]
     },
@@ -73,7 +77,7 @@
     "drivers": [
         {
             "id": "uvc_g3",
-            "class": "other",
+            "class": "camera",
             "capabilities": [],
             "name": {
                 "en": "UVC-G3"
