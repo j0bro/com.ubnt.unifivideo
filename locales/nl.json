@@ -1,8 +1,5 @@
 {
     "title": "UniFi Video",
-    "nvr": {
-        "description": "NVR"
-    },
     "pair": {
         "title": "We zijn er bijna",
         "step1": "Gebruik onderstaande link om naar de gebruikersinstellingen van de NVR te gaan.",
@@ -13,6 +10,7 @@
     },
     "settings": {
         "title": "UniFi Video instellingen",
+        "apihost": "IP-adres NVR",
         "apikey": "API-sleutel",
         "apply": "Toepassen"
     }

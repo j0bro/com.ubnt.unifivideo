@@ -7,23 +7,24 @@
     </ol>
 
     <p>
-        <a href="javascript:void(0);" id="link_to_nvr" style="visibility: hidden" />
+        <a href="javascript:void(0);" id="href_apihost" style="visibility: hidden" />
     </p>
 
     <div class="field row">
-        <label for="ufv_apikey" data-i18n="settings.apikey"></label>
-        <input id="ufv_apikey" type="text" value="" />
+        <label for="txt_apikey" data-i18n="settings.apikey"></label>
+        <input id="txt_apikey" type="text" value="" />
     </div>
+
     <div class="field row">
-        <button id="apply" class="right" data-i18n="settings.apply" disabled="disabled"></button>
+        <button id="btn_apply" class="right" data-i18n="settings.apply" disabled="disabled"></button>
     </div>
 
     <script type="text/javascript">
         Homey.setTitle(__('pair.title'))
 
-        var linkNvr = document.getElementById('link_to_nvr');
-        var txtApiKey = document.getElementById('ufv_apikey');
-        var btnApply = document.getElementById('apply');
+        var hrefApiHost = document.getElementById('href_apihost');
+        var txtApiKey = document.getElementById('txt_apikey');
+        var btnApply = document.getElementById('btn_apply');
 
         txtApiKey.addEventListener('input', event => {
             btnApply.disabled = txtApiKey.value === '';
@@ -38,21 +39,18 @@
             });
         });
 
-        Homey.on('api_key_set', apikey => {
-            console.log('[PAIR] API key set.');
+        Homey.on('ufv:pair:apikey', apikey => {
+            console.log('[PAIR] API key: ' + apikey);
 
             Homey.showView('add_devices');
         });
 
-        Homey.on('ufv_nvr_set', nvr => {
-            console.log('[PAIR] NVR set.');
+        Homey.on('ufv:pair:apihost', apihost => {
+            console.log('[PAIR] API host: ' + apihost);
 
-            let nvrUrl = nvr.webProtocol + '://' + nvr.ip + ':' + nvr.webPort + '/users';
-
-            linkNvr.text = __('pair.nvr_user_settings');
-            linkNvr.onclick = () => Homey.popup(nvrUrl, { width: 1024, height: 768 });
-            linkNvr.style.visibility = "visible";
+            hrefApiHost.text = __('pair.nvr_user_settings');
+            hrefApiHost.onclick = () => Homey.popup(apihost + '/users', { width: 1024, height: 768 });
+            hrefApiHost.style.visibility = "visible";
         });
-
     </script>
 </body>

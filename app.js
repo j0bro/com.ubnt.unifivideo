@@ -2,30 +2,35 @@
 
 const Homey = require('homey');
 const UfvApi = require('./lib/ufvapi');
-
-const UFV_API_KEY = 'ufv_apikey';
-const UFV_NVR = 'ufv_nvr';
-const UFV_NVR_IP = 'ufv_nvr_ip';
-const UFV_NVR_UPDATED = 'ufv_nvr_updated';
+const UfvConstants = require('./lib/ufvconstants');
 
 class UniFiVideo extends Homey.App {
 
     onInit() {
-        this.ufv = new UfvApi();        
-        this.ufv.on(UFV_NVR_UPDATED, nvr => Homey.ManagerSettings.set(UFV_NVR, nvr));
-        this.ufv.Discover();
+        this.api = new UfvApi();
+        this.api.on(UfvConstants.API_HOST, apihost => {
+            console.log('Saving API host in settings.');
+            Homey.ManagerSettings.set(UfvConstants.API_HOST, apihost);
+        });
+        this.api.on(UfvConstants.API_KEY, apikey => {
+            console.log('Saving API key in settings.');
+            Homey.ManagerSettings.set(UfvConstants.API_KEY, apikey);
+        });
+        this.api.Discover();
 
+        /*
         Homey.ManagerSettings.on('set', key => {
             switch (key) {
-                case UFV_API_KEY:
-                    this.ufv.SetApiKey(Homey.ManagerSettings.get(UFV_API_KEY));
+                case UfvConstants.API_HOST:
+                    this.api.SetApiHost(Homey.ManagerSettings.get(UfvConstants.API_HOST));
                     break;
 
-                case UFV_NVR_IP:
-                    this.ufv.SetNvrIp(Homey.ManagerSettings.get(UFV_NVR_IP));
+                case UfvConstants.API_KEY:
+                    this.api.SetApiKey(Homey.ManagerSettings.get(UfvConstants.API_KEY));
                     break;
             }
         });
+        */
 
         this.snapshotToken = new Homey.FlowToken('ufv_snapshot', {
             type: 'image',
