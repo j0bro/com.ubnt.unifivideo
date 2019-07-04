@@ -33,10 +33,8 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 
 ## Changelog
 
-### Version 0.9.4
-* Add support for Homey Camera SDK
-
 ### Version 0.9.3
+* Add support for Homey Camera SDK
 * Add support for UVC G3 Flex
 * Add support for UVC G3 Micro
 * Add support for UVC G3 Pro
