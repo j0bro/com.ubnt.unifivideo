@@ -10,6 +10,7 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 	* UVC-G3-AF
 	* UVC-G3-DOME
 	* UVC-G3-PRO
+* UniFi® Video Camera G4 series:
 	* UVC-G4-PRO
 
 ## Getting started
@@ -31,6 +32,9 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 	* Make sure the UniFi Video user is part of a group that has the `edit camera` permission.
 
 ## Changelog
+
+### Version 0.9.4
+* Add support for Homey Camera SDK
 
 ### Version 0.9.3
 * Add support for UVC G3 Flex
