@@ -4,18 +4,18 @@ const Homey = require('homey');
 const UfvApi = require('../../lib/ufvapi');
 const UfvConstants = require('../../lib/ufvconstants');
 
-class UvcG3Driver extends Homey.Driver {
+class CameraDriver extends Homey.Driver {
 
     onInit() {
-        this.log('Driver initialized.');
+        this.log('Camera driver initialized.');
     }
 
     onPair(socket) {
         this._devices = {};
         this._api = new UfvApi();
 
-        this._api.on(UfvConstants.DEVICE_UVCG3, device => {
-            this.log('Device found: ' + device.hostname, '@', device.ip);
+        this._api.on(UfvConstants.DEVICE_CAMERA, device => {
+            this.log('Camera found: ' + device.hostname, '@', device.ip);
 
             if (!this._devices.hasOwnProperty(device.mac)) {
                 this._devices[device.mac] = device;
@@ -45,4 +45,4 @@ class UvcG3Driver extends Homey.Driver {
     }
 }
 
-module.exports = UvcG3Driver;
+module.exports = CameraDriver;

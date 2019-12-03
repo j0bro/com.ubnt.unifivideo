@@ -8,29 +8,19 @@ class UniFiVideo extends Homey.App {
 
     onInit() {
         this.api = new UfvApi();
+
         this.api.on(UfvConstants.API_HOST, apihost => {
             console.log('Saving API host in settings.');
+            apihost.ip
             Homey.ManagerSettings.set(UfvConstants.API_HOST, apihost);
         });
+
         this.api.on(UfvConstants.API_KEY, apikey => {
             console.log('Saving API key in settings.');
             Homey.ManagerSettings.set(UfvConstants.API_KEY, apikey);
         });
+
         this.api.Discover();
-
-        /*
-        Homey.ManagerSettings.on('set', key => {
-            switch (key) {
-                case UfvConstants.API_HOST:
-                    this.api.SetApiHost(Homey.ManagerSettings.get(UfvConstants.API_HOST));
-                    break;
-
-                case UfvConstants.API_KEY:
-                    this.api.SetApiKey(Homey.ManagerSettings.get(UfvConstants.API_KEY));
-                    break;
-            }
-        });
-        */
 
         this.snapshotToken = new Homey.FlowToken('ufv_snapshot', {
             type: 'image',

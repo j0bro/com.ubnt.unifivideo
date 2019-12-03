@@ -80,15 +80,15 @@
     },
     "drivers": [
         {
-            "id": "uvc_g3",
+            "id": "camera",
             "class": "camera",
-            "capabilities": [],
+            "capabilities": ["alarm_motion"],
             "name": {
-                "en": "UVC-G3"
+                "en": "Camera"
             },
             "images": {
-                "large": "drivers/uvc_g3/assets/images/large.png",
-                "small": "drivers/uvc_g3/assets/images/small.png"
+                "large": "drivers/camera/assets/images/large.png",
+                "small": "drivers/camera/assets/images/small.png"
             },
             "pair": [
                 {
@@ -100,6 +100,29 @@
                 },
                 {
                     "id": "enter_apikey"
+                },
+                {
+                    "id": "add_devices",
+                    "template": "add_devices"
+                }
+            ]
+        },
+        {
+            "id": "nvr",
+            "class": "other",
+            "capabilities": [],
+            "name": {
+                "en": "Network Video Recorder"
+            },
+            "images": {
+                "large": "drivers/nvr/assets/images/large.png",
+                "small": "drivers/nvr/assets/images/small.png"
+            },
+            "pair": [
+                {
+                    "id": "list_devices",
+                    "template": "list_devices",
+                    "next": "add_devices"
                 },
                 {
                     "id": "add_devices",
@@ -151,7 +174,7 @@
                     {
                         "name": "device",
                         "type": "device",
-                        "filter": "driver_id=uvc_g3"
+                        "filter": "driver_id=camera"
                     },
                     {
                         "name": "recording_mode",
@@ -192,7 +215,7 @@
                     {
                         "name": "device",
                         "type": "device",
-                        "filter": "driver_id=uvc_g3"
+                        "filter": "driver_id=camera"
                     },
                     {
                         "name": "width",
