@@ -1,234 +1,236 @@
 {
-    "id": "com.ubnt.unifivideo",
-    "sdk": 2,
-    "name": {
-        "en": "UniFi Video"
-    },
-    "description": {
-        "en": "Control Ubiquiti UniFi Video devices with Homey.",
-        "nl": "Bedien Ubiquiti UniFi Video apparaten met Homey."
-    },
-    "tags": {
-        "en": [
-            "ubiquiti",
-            "unifi",
-            "video",
-            "security",
-            "camera",
-            "snapshot",
-            "recording"
-        ],
-        "nl": [
-            "ubiquiti",
-            "unifi",
-            "video",
-            "beveiligingscamera",
-            "camera",
-            "momentopname",
-            "opname"
-        ]
-    },
-    "images": {
-        "large": "assets/images/large.png",
-        "small": "assets/images/small.png"
-    },
-    "category": [
-        "appliances",
-        "security",
-        "video"
+  "id": "com.ubnt.unifivideo",
+  "sdk": 2,
+  "name": {
+    "en": "UniFi Video"
+  },
+  "description": {
+    "en": "Control Ubiquiti UniFi Video devices with Homey.",
+    "nl": "Bedien Ubiquiti UniFi Video apparaten met Homey."
+  },
+  "tags": {
+    "en": [
+      "ubiquiti",
+      "unifi",
+      "video",
+      "security",
+      "camera",
+      "snapshot",
+      "recording"
     ],
-    "version": "1.0.0",
-    "compatibility": ">=1.5.0",
-    "author": {
+    "nl": [
+      "ubiquiti",
+      "unifi",
+      "video",
+      "beveiligingscamera",
+      "camera",
+      "momentopname",
+      "opname"
+    ]
+  },
+  "images": {
+    "large": "assets/images/large.png",
+    "small": "assets/images/small.png"
+  },
+  "category": [
+    "appliances",
+    "security",
+    "video"
+  ],
+  "version": "1.0.0",
+  "compatibility": ">=1.5.0",
+  "author": {
+    "name": "Jeroen Brosens",
+    "email": "j.brosens+unifivideo@gmail.com"
+  },
+  "contributors": {
+    "developers": [
+      {
         "name": "Jeroen Brosens",
         "email": "j.brosens+unifivideo@gmail.com"
-    },
-    "contributors": {
-        "developers": [
-            {
-                "name": "Jeroen Brosens",
-                "email": "j.brosens+unifivideo@gmail.com"
-            },
-            {
-                "name": "Stèphan Eizinga",
-                "email": "stephan@monkeysoft.nl"
-            }
-        ]
-    },
-    "contributing": {
-        "donate": {
-            "paypal": {
-                "username": "jeroenbrosens"
-            }
-        }
-    },
-    "bugs": {
-        "url": "https://github.com/j0bro/com.ubnt.unifivideo/issues"
-    },
-    "source": "https://github.com/j0bro/com.ubnt.unifivideo",
-    "support": "mailto:j.brosens+unifivideo@gmail.com",
-    "capabilities": {
-        "nvr_version": {
-            "type": "string",
-            "title": {
-                "en": "Version",
-                "nl": "Versie"
-            },
-            "getable": true,
-            "setable": false
-        }
-    },
-    "drivers": [
+      },
+      {
+        "name": "Stèphan Eizinga",
+        "email": "stephan@monkeysoft.nl"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "jeroenbrosens"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/j0bro/com.ubnt.unifivideo/issues"
+  },
+  "source": "https://github.com/j0bro/com.ubnt.unifivideo",
+  "support": "mailto:j.brosens+unifivideo@gmail.com",
+  "capabilities": {
+    "nvr_version": {
+      "type": "string",
+      "title": {
+        "en": "Version",
+        "nl": "Versie"
+      },
+      "getable": true,
+      "setable": false
+    }
+  },
+  "drivers": [
+    {
+      "id": "camera",
+      "class": "camera",
+      "capabilities": [
+        "alarm_motion"
+      ],
+      "name": {
+        "en": "Camera"
+      },
+      "images": {
+        "large": "drivers/camera/assets/images/large.png",
+        "small": "drivers/camera/assets/images/small.png"
+      },
+      "pair": [
         {
-            "id": "camera",
-            "class": "camera",
-            "capabilities": ["alarm_motion"],
-            "name": {
-                "en": "Camera"
-            },
-            "images": {
-                "large": "drivers/camera/assets/images/large.png",
-                "small": "drivers/camera/assets/images/small.png"
-            },
-            "pair": [
-                {
-                    "id": "list_devices",
-                    "template": "list_devices",
-                    "navigation": {
-                        "next": "enter_apikey"
-                    }
-                },
-                {
-                    "id": "enter_apikey"
-                },
-                {
-                    "id": "add_devices",
-                    "template": "add_devices"
-                }
-            ]
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "enter_apikey"
+          }
         },
         {
-            "id": "nvr",
-            "class": "other",
-            "capabilities": [],
-            "name": {
-                "en": "Network Video Recorder"
-            },
-            "images": {
-                "large": "drivers/nvr/assets/images/large.png",
-                "small": "drivers/nvr/assets/images/small.png"
-            },
-            "pair": [
-                {
-                    "id": "list_devices",
-                    "template": "list_devices",
-                    "next": "add_devices"
-                },
-                {
-                    "id": "add_devices",
-                    "template": "add_devices"
-                }
-            ]
+          "id": "enter_apikey"
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
         }
-    ],
-    "flow": {
-        "triggers": [
-            {
-                "id": "ufv_snapshot_created",
-                "title": {
-                    "en": "A snapshot was created",
-                    "nl": "Er is een snapshot gemaakt"
-                },
-                "tokens": [
-                    {
-                        "name": "ufv_snapshot_token",
-                        "type": "image",
-                        "title": {
-                            "en": "Snapshot",
-                            "nl": "Momentopname"
-                        }
-                    },
-                    {
-                        "name": "ufv_snapshot_camera",
-                        "type": "string",
-                        "title": {
-                            "en": "Camera",
-                            "nl": "Camera"
-                        },
-                        "example": {
-                            "en": "Front door",
-                            "nl": "Voordeur"
-                        }
-                    }
-                ]
-            }
-        ],
-        "actions": [
-            {
-                "id": "ufv_set_recording_mode",
-                "title": {
-                    "en": "Set recording mode",
-                    "nl": "Stel opnamemodus in"
-                },
-                "args": [
-                    {
-                        "name": "device",
-                        "type": "device",
-                        "filter": "driver_id=camera"
-                    },
-                    {
-                        "name": "recording_mode",
-                        "type": "dropdown",
-                        "values": [
-                            {
-                                "id": "none",
-                                "label": {
-                                    "en": "Don't record",
-                                    "nl": "Niet opnemen"
-                                }
-                            },
-                            {
-                                "id": "always",
-                                "label": {
-                                    "en": "Always record",
-                                    "nl": "Altijd opnemen"
-                                }
-                            },
-                            {
-                                "id": "motion",
-                                "label": {
-                                    "en": "Record only motion",
-                                    "nl": "Alleen beweging opnemen"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "id": "ufv_take_snapshot",
-                "title": {
-                    "en": "Take a snapshot",
-                    "nl": "Maak een momentopname"
-                },
-                "args": [
-                    {
-                        "name": "device",
-                        "type": "device",
-                        "filter": "driver_id=camera"
-                    },
-                    {
-                        "name": "width",
-                        "type": "number",
-                        "min": 0,
-                        "max": 1920,
-                        "placeholder": {
-                            "en": "Width in pixels",
-                            "nl": "Breedte in pixels"
-                        }
-                    }
-                ]
-            }
-        ]
+      ]
+    },
+    {
+      "id": "nvr",
+      "class": "other",
+      "capabilities": [],
+      "name": {
+        "en": "Network Video Recorder"
+      },
+      "images": {
+        "large": "drivers/nvr/assets/images/large.png",
+        "small": "drivers/nvr/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "next": "add_devices"
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ]
     }
+  ],
+  "flow": {
+    "triggers": [
+      {
+        "id": "ufv_snapshot_created",
+        "title": {
+          "en": "A snapshot was created",
+          "nl": "Er is een snapshot gemaakt"
+        },
+        "tokens": [
+          {
+            "name": "ufv_snapshot_token",
+            "type": "image",
+            "title": {
+              "en": "Snapshot",
+              "nl": "Momentopname"
+            }
+          },
+          {
+            "name": "ufv_snapshot_camera",
+            "type": "string",
+            "title": {
+              "en": "Camera",
+              "nl": "Camera"
+            },
+            "example": {
+              "en": "Front door",
+              "nl": "Voordeur"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "ufv_set_recording_mode",
+        "title": {
+          "en": "Set recording mode",
+          "nl": "Stel opnamemodus in"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=camera"
+          },
+          {
+            "name": "recording_mode",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "none",
+                "label": {
+                  "en": "Don't record",
+                  "nl": "Niet opnemen"
+                }
+              },
+              {
+                "id": "always",
+                "label": {
+                  "en": "Always record",
+                  "nl": "Altijd opnemen"
+                }
+              },
+              {
+                "id": "motion",
+                "label": {
+                  "en": "Record only motion",
+                  "nl": "Alleen beweging opnemen"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ufv_take_snapshot",
+        "title": {
+          "en": "Take a snapshot",
+          "nl": "Maak een momentopname"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=camera"
+          },
+          {
+            "name": "width",
+            "type": "number",
+            "min": 0,
+            "max": 1920,
+            "placeholder": {
+              "en": "Width in pixels",
+              "nl": "Breedte in pixels"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
