@@ -1,17 +1,14 @@
 {
     "title": "UniFi Video",
-    "pair": {
-        "title": "We zijn er bijna",
-        "step1": "Gebruik onderstaande link om naar de gebruikersinstellingen van de NVR te gaan.",
-        "step2": "Selecteer de gebruiker die door deze Homey app gebruikt wordt.",
-        "step3": "Ga naar het tabblad 'API access' en schakel 'Allow API Usage' in.",
-        "step4": "Kopieer de 'API Key' en plak deze in onderstaand tekstveld.",
-        "nvr_user_settings": "Ga naar de gebruikersinstellingen"
-    },
     "settings": {
         "title": "UniFi Video instellingen",
-        "apihost": "IP-adres NVR",
-        "apikey": "API-sleutel",
-        "apply": "Toepassen"
+        "instruction": "Log in met de gegevens van de UniFi Video-gebruiker.",
+        "nvr": "Gegevens van NVR",
+        "nvrip": "IP-adres",
+        "credentials": "UniFi Video gebruikersgegevens",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "apply": "Toepassen",
+        "saved": "Instellingen opgeslagen."
     }
 }

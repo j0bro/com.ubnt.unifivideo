@@ -1,56 +1,28 @@
 'use strict';
 
 const Homey = require('homey');
-const Api = Homey.app.api;
 const UfvConstants = require('../../lib/ufvconstants');
-const fetch = require('node-fetch');
+
+const Api = Homey.app.api;
 
 class Nvr extends Homey.Device {
+  async onInit() {
+    Api.on(UfvConstants.EVENT_NVR_HEALTH, this._onHealthEvent.bind(this));
+    Api.on(UfvConstants.EVENT_NVR_SERVER, this._onServerEvent.bind(this));
+    Api.on(UfvConstants.EVENT_NVR_OTHER, this._onOtherEvent.bind(this));
+  }
 
-    async onInit() {
-        let apiHost = Homey.ManagerSettings.get(UfvConstants.API_HOST);
-        let apiKey = Homey.ManagerSettings.get(UfvConstants.API_KEY);
+  _onHealthEvent(health) {
+    this.log(`[NVR] HEALTH: status=[${health.status}], statusPhrase=[${health.statusPhrase}]`);
+  }
 
-        Api.SetApiHost(apiHost);
-        Api.SetApiKey(apiKey);
+  _onServerEvent(server) {
+    this.log(`[NVR] SERVER: cpuLoad=[${server.systemInfo.cpuLoad}]`);
+  }
 
-        Api.on(UfvConstants.API_HOST, this._updateModel.bind(this));
-        Api.on(UfvConstants.API_KEY, this._updateModel.bind(this));
-    }
-
-    _updateModel() {
-        Api.GetSysInfo()
-            .then(sysinfo => {
-                if (Homey.env.DEBUG) {
-                    this.log('[DEVICE] UVC-NVR found running UniFi Video version: ' + sysinfo.version);
-                }
-            })
-            .catch(this.error.bind(this, '[sysinfo]'));
-
-        Api.GetServer()
-            .then(server => {
-                if (Homey.env.DEBUG) {
-                    this.log('[DEVICE] Server name: ' + server.name + ', address: ' + server.host);
-                }
-            })
-            .catch(this.error.bind(this, '[server]'));
-
-        Api.GetCameras()
-            .then(cameras => {
-                this._cameras = cameras;
-
-                if (Homey.env.DEBUG) {
-                    for (let i = 0; i < this._cameras.length; i++) {
-                        let camera = this._cameras[i];
-
-                        this.log('[DEVICE] Camera name: ' + camera.name
-                            + ', model: ' + camera.model
-                            + ', address: ' + camera.host);
-                    }
-                }
-            })
-            .catch(this.error.bind(this, '[camera]'));
-    }
+  _onOtherEvent(other) {
+    this.log(`[NVR] OTHER: ${JSON.stringify(other, null, 2)}]`);
+  }
 }
 
 module.exports = Nvr;
