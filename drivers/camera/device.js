@@ -16,13 +16,9 @@ class Camera extends Homey.Device {
     new Homey.FlowCardAction(UfvConstants.ACTION_TAKE_SNAPSHOT)
       .register()
       .registerRunListener((args, state) => { // eslint-disable-line no-unused-vars
-        const device = args.device.getData();
-
-        Api.FindCamera(device.mac)
-          .then(camera => Api.Snapshot(camera, args.width)
-            .then(buffer => this._onSnapshotBuffer(camera, buffer))
-            .catch(this.error.bind(this, '[snapshot.buffer]')))
-          .catch(this.error.bind(this, '[camera.find]'));
+        Api.snapshot(args.device.getData(), args.width)
+          .then(buffer => this._onSnapshotBuffer(this._data, buffer))
+          .catch(this.error.bind(this, 'Could not take snapshot.'));
 
         return Promise.resolve(true);
       });
@@ -30,24 +26,17 @@ class Camera extends Homey.Device {
     new Homey.FlowCardAction(UfvConstants.ACTION_SET_RECORDING_MODE)
       .register()
       .registerRunListener((args, state) => { // eslint-disable-line no-unused-vars
-        const device = args.device.getData();
+        const isFullTimeEnabled = args.recording_mode === 'always';
+        const isMotionEnabled = args.recording_mode === 'motion';
 
-        Api.FindCamera(device.mac)
-          .then(camera => {
-            const isFullTimeEnabled = args.recording_mode === 'always';
-            const isMotionEnabled = args.recording_mode === 'motion';
-
-            Api.SetRecordingMode(camera, isFullTimeEnabled, isMotionEnabled)
-              .then(this.log.bind(this, '[recordingmode.set]'))
-              .catch(this.error.bind(this, '[recordingmode.set]'));
-          })
-          .catch(this.error.bind(this, '[camera.find]'));
+        Api.setRecordingMode(args.device.getData(), isFullTimeEnabled, isMotionEnabled)
+          .then(this.log.bind(this, '[recordingmode.set]'))
+          .catch(this.error.bind(this, '[recordingmode.set]'));
 
         return Promise.resolve(true);
       });
 
-    // Register image
-    await this._registerSnapshotImage();
+    await this._createSnapshotImage();
 
     // Subscribe to camera specific events
     Api.on(UfvConstants.EVENT_NVR_CAMERA, this._onCameraEvent.bind(this));
@@ -56,19 +45,30 @@ class Camera extends Homey.Device {
   }
 
   _onCameraEvent(camera) {
-    this.log(`[CAMERA] CAMERA: name=[${camera.name}], recordingIndicator=[${camera.recordingIndicator}]`);
+    this.log(JSON.stringify(camera, null, 2));
+
+    // TODO correct?
+    if (camera.id === this._data.id) {
+      this.log(`CAMERA: name=[${camera.name}], recordingIndicator=[${camera.recordingIndicator}]`);
+    }
   }
 
   _onMotionEvent(motion) {
+    // TODO: filter for this camera
+    this.log(JSON.stringify(motion, null, 2));
+
     if (motion.endTime === 0) {
-      this.log(`[CAMERA] MOTION STARTED: cameraId=[${motion.cameraId}]`);
+      this.log(`MOTION STARTED: cameraId=[${motion.cameraId}]`);
     } else {
-      this.log(`[CAMERA] MOTION ENDED: cameraId=[${motion.cameraId}]`);
+      this.log(`MOTION ENDED: cameraId=[${motion.cameraId}]`);
     }
   }
 
   _onRecordingEvent(recording) {
-    this.log(`[CAMERA] RECORDING: eventType=[${recording.eventType}], cameraName=[${recording.meta.cameraName}]`);
+    this.log(JSON.stringify(recording, null, 2));
+
+    // TODO: filter for this camera
+    this.log(`RECORDING: eventType=[${recording.eventType}], cameraName=[${recording.meta.cameraName}]`);
   }
 
   _onSnapshotBuffer(camera, buffer) {
@@ -87,57 +87,29 @@ class Camera extends Homey.Device {
       .catch(this.error.bind(this, '[snapshot.register]'));
   }
 
-  /**
-   * Method that registers a snapshot image and calls setCameraImage.
-   * @private
-   */
-  async _registerSnapshotImage() {
+  async _createSnapshotImage() {
     this._snapshotImage = new Homey.Image();
+    this._snapshotImage.setStream(async stream => {
+      // Obtain snapshot URL
+      let snapshotUrl = null;
 
-    // Set stream, this method is called when image.update() is called
-    this._snapshotImage.setStream(async (stream) => {
-      let fullUrl = null;
+      await Api.createSnapshotUrl(this._data, 1920)
+        .then(url => { snapshotUrl = url; })
+        .catch(this.error.bind(this, 'Could not create snapshot URL.'));
 
-      await Api.FindCamera(this._data.mac)
-        .then(camera => Api.SnapshotUrl(camera, 1920)
-          .then(url => {
-            fullUrl = url;
-          })
-          .catch(this.error))
-        .catch(this.error);
-
-      this.log('_registerSnapshotImage() -> setStream -> SnapshotUrl');
-
-      if (!fullUrl) {
-        this.error('_registerSnapshotImage() -> setStream ->', 'failed no image url available');
-        throw new Error('No image url available');
+      if (!snapshotUrl) {
+        throw new Error('Invalid snapshot url.');
       }
-      this.log('_registerSnapshotImage() -> setStream ->', fullUrl);
 
-      const headers = {
-        Host: Api.GetApiHost(),
-        'Content-Type': '*/*',
-      };
+      // Fetch image
+      const res = await fetch(snapshotUrl);
+      if (!res.ok) throw new Error('Could not fetch snapshot image.');
 
-      const options = {
-        method: 'GET',
-        headers,
-      };
-
-      // Fetch image from url and pipe
-      const res = await fetch(fullUrl, options);
-      if (!res.ok) {
-        this.error('_registerSnapshotImage() -> setStream -> failed', res.statusText);
-        throw new Error('Could not fetch image');
-      }
-      this.log('_registerSnapshotImage() -> setStream ->', fullUrl);
-
-      res.body.pipe(stream);
+      return res.body.pipe(stream);
     });
 
-    // Register and set camera iamge
-    return this._snapshotImage.register()
-      .then(() => this.log('_registerSnapshotImage() -> registered'))
+    // Register snapshot and set camera image
+    this._snapshotImage.register()
       .then(() => this.setCameraImage('snapshot', 'Snapshot', this._snapshotImage))
       .catch(this.error);
   }

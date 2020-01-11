@@ -1,8 +1,6 @@
 'use strict';
 
 const Homey = require('homey');
-const UfvApi = require('../../lib/ufvapi');
-const UfvConstants = require('../../lib/ufvconstants');
 
 class CameraDriver extends Homey.Driver {
   onInit() {
@@ -10,27 +8,18 @@ class CameraDriver extends Homey.Driver {
   }
 
   onPair(socket) {
-    this.devices = {};
-    this.api = new UfvApi();
-
-    this.api.on(UfvConstants.DEVICE_CAMERA, device => {
-      this.log(`Device found: ${device.hostname} (${device.ip})`);
-
-      if (!Object.prototype.hasOwnProperty.call(this.devices, device.mac)) {
-        this.devices[device.mac] = device;
-      }
-    });
+    Homey.app.api.getCameras()
+      .then(devices => { this.devices = devices; })
+      .catch(this.error.bind(this, 'Could not get cameras.'));
 
     socket.on('list_devices', (data, callback) => {
       callback(null, Object.values(this.devices).map(device => (
         {
-          name: device.hostname,
+          name: device.name,
           data: device,
         }
       )));
     });
-
-    this.api.discover();
   }
 }
 

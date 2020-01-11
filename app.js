@@ -28,7 +28,7 @@ class UniFiVideo extends Homey.App {
 
     // Subscribe to settings updates
     Homey.ManagerSettings.on('set', key => {
-      if (key === 'ufv:credentials' || key === 'ufv:nvrip') {
+      if (key === 'ufv:credentials') {
         this._subscribeToEvents();
       }
     });
@@ -36,6 +36,7 @@ class UniFiVideo extends Homey.App {
     // Subscribe to NVR discovery
     this.api.on(UfvConstants.DEVICE_NVR, nvr => {
       Homey.ManagerSettings.set('ufv:nvrip', nvr.ip);
+      this._subscribeToEvents();
     });
 
     // Discover NVR
