@@ -3,23 +3,18 @@
 const Homey = require('homey');
 
 class CameraDriver extends Homey.Driver {
-  onInit() {
-    this.log('Camera driver initialized.');
-  }
+  async onPairListDevices(data, callback) {
+    const devices = await Homey.app.api.getCameras();
 
-  onPair(socket) {
-    Homey.app.api.getCameras()
-      .then(devices => { this.devices = devices; })
-      .catch(this.error.bind(this, 'Could not get cameras.'));
+    callback(null, Object.values(devices).map(device => {
+      // Add the required id property
+      Object.assign(device, { id: device._id });
 
-    socket.on('list_devices', (data, callback) => {
-      callback(null, Object.values(this.devices).map(device => (
-        {
-          name: device.name,
-          data: device,
-        }
-      )));
-    });
+      return {
+        name: device.name,
+        data: device,
+      };
+    }));
   }
 }
 
