@@ -9,16 +9,18 @@ x check if API key is still needed or cookie can be used, snapshot
 v get API key and save
 v get camera data from NVR instead of discovery
 v fix snapshot url
-- motion alarm in Homey camera device
+v camera: filter events by camera id -> forward event from driver to device instance
+v motion alarm in Homey camera device
+v fix double snapshot target
 - update pair flow:
   - discover NVR
   - log in 
   - discover cameras
-- log in during pairing
-- fix double snapshot target
-- camera: filter events by camera id -> forward event from driver to device instance
 - Camera events in UI
 - NVR events in UI
 - Complete API
 - Update README
   - Make sure API access is ON
+- Custom capabilities NVR (health:[status,phrase];server:[cpuload])
+- Custom capabilities Camera (recording:[type];recordingMode,motion)
+- fix snapshot Image deprecations

@@ -5,7 +5,7 @@ const UfvApi = require('./lib/ufvapi');
 const UfvConstants = require('./lib/ufvconstants');
 
 class UniFiVideo extends Homey.App {
-  onInit() {
+  async onInit() {
     // Register snapshot image token
     this.snapshotToken = new Homey.FlowToken('ufv_snapshot', {
       type: 'image',
@@ -23,8 +23,12 @@ class UniFiVideo extends Homey.App {
     this.api = new UfvApi();
 
     // Subscribe to connection events
-    this.api.on(UfvConstants.EVENT_CONNECTION_ERROR, this._onEventConnectionError.bind(this));
-    this.api.on(UfvConstants.EVENT_CONNECTION_CLOSED, this._onEventConnectionClosed.bind(this));
+    this.api.on(UfvConstants.EVENT_CONNECTION_ERROR, this._onConnectionError.bind(this));
+    this.api.on(UfvConstants.EVENT_CONNECTION_CLOSED, this._onConnectionClosed.bind(this));
+
+    // Subscribe to camera events
+    this.api.on(UfvConstants.EVENT_NVR_MOTION, this._onMotion.bind(this));
+    this.api.on(UfvConstants.EVENT_NVR_RECORDING, this._onRecording.bind(this));
 
     // Subscribe to settings updates
     Homey.ManagerSettings.on('set', key => {
@@ -64,14 +68,22 @@ class UniFiVideo extends Homey.App {
       .catch(error => this.log(error));
   }
 
-  _onEventConnectionClosed() {
-    this.log('Event connection closed, retrying in 5s...');
+  _onConnectionError(error) {
+    this.log(`Connection error: ${error.message}, retrying in 5s...`);
     setTimeout(() => this._subscribeToEvents(), 5000);
   }
 
-  _onEventConnectionError(error) {
-    this.log(`Event connection error: ${error.message}, retrying in 5s...`);
+  _onConnectionClosed() {
+    this.log('Connection closed, retrying in 5s...');
     setTimeout(() => this._subscribeToEvents(), 5000);
+  }
+
+  _onMotion(motion) {
+    Homey.ManagerDrivers.getDriver('camera').onMotion(motion);
+  }
+
+  _onRecording(recording) {
+    Homey.ManagerDrivers.getDriver('camera').onRecording(recording);
   }
 }
 
