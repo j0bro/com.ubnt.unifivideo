@@ -12,13 +12,13 @@ v fix snapshot url
 v camera: filter events by camera id -> forward event from driver to device instance
 v motion alarm in Homey camera device
 v fix double snapshot target
+v Camera events in UI
+v NVR events in UI
+- load initial device state on start
 - update pair flow:
   - discover NVR
   - log in 
   - discover cameras
-- Camera events in UI
-- NVR events in UI
-- Complete API
 - Update README
   - Make sure API access is ON
 - Custom capabilities NVR (health:[status,phrase];server:[cpuload])

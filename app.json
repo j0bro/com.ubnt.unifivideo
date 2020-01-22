@@ -68,14 +68,91 @@
   "source": "https://github.com/j0bro/com.ubnt.unifivideo",
   "support": "mailto:j.brosens+unifivideo@gmail.com",
   "capabilities": {
-    "nvr_version": {
+    "camera_recording_status": {
       "type": "string",
       "title": {
-        "en": "Version",
-        "nl": "Versie"
+        "en": "Recording status",
+        "nl": "Opnamestatus"
       },
       "getable": true,
-      "setable": false
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "nvr_cpu_load": {
+      "type": "number",
+      "units": {
+        "en": "%"
+      },
+      "title": {
+        "en": "System load",
+        "nl": "Systeembelasting"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "nvr_disk_used": {
+      "type": "number",
+      "units": {
+        "en": "%"
+      },
+      "title": {
+        "en": "Disk used",
+        "nl": "Schijfgebruik"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "nvr_health_phrase": {
+      "type": "string",
+      "title": {
+        "en": "Status phrase",
+        "nl": "Statusomschrijving"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "nvr_health_status": {
+      "type": "enum",
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      },
+      "values": [
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "nl": "Onbekend"
+          }
+        },
+        {
+          "id": "green",
+          "title": {
+            "en": "Healthy",
+            "nl": "Gezond"
+          }
+        },
+        {
+          "id": "orange",
+          "title": {
+            "en": "Warning",
+            "nl": "Waarschuwing"
+          }
+        },
+        {
+          "id": "red",
+          "title": {
+            "en": "Critical",
+            "nl": "Kritiek"
+          }
+        }
+      ]
     }
   },
   "drivers": [
@@ -83,7 +160,8 @@
       "id": "camera",
       "class": "camera",
       "capabilities": [
-        "alarm_motion"
+        "alarm_motion",
+        "camera_recording_status"
       ],
       "name": {
         "en": "Camera"
@@ -109,7 +187,12 @@
     {
       "id": "nvr",
       "class": "other",
-      "capabilities": [],
+      "capabilities": [
+        "nvr_cpu_load",
+        "nvr_disk_used",
+        "nvr_health_status",
+        "nvr_health_phrase"
+      ],
       "name": {
         "en": "Network Video Recorder"
       },

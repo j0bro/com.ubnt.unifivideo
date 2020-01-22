@@ -26,9 +26,11 @@ class UniFiVideo extends Homey.App {
     this.api.on(UfvConstants.EVENT_CONNECTION_ERROR, this._onConnectionError.bind(this));
     this.api.on(UfvConstants.EVENT_CONNECTION_CLOSED, this._onConnectionClosed.bind(this));
 
-    // Subscribe to camera events
-    this.api.on(UfvConstants.EVENT_NVR_MOTION, this._onMotion.bind(this));
-    this.api.on(UfvConstants.EVENT_NVR_RECORDING, this._onRecording.bind(this));
+    // Subscribe to NVR events
+    this.api.on(UfvConstants.EVENT_NVR_CAMERA, this._onNvrCamera.bind(this));
+    this.api.on(UfvConstants.EVENT_NVR_HEALTH, this._onNvrHealth.bind(this));
+    this.api.on(UfvConstants.EVENT_NVR_MOTION, this._onNvrMotion.bind(this));
+    this.api.on(UfvConstants.EVENT_NVR_SERVER, this._onNvrServer.bind(this));
 
     // Subscribe to settings updates
     Homey.ManagerSettings.on('set', key => {
@@ -78,12 +80,20 @@ class UniFiVideo extends Homey.App {
     setTimeout(() => this._subscribeToEvents(), 5000);
   }
 
-  _onMotion(motion) {
+  _onNvrCamera(camera) {
+    Homey.ManagerDrivers.getDriver('camera').onCamera(camera);
+  }
+
+  _onNvrHealth(health) {
+    Homey.ManagerDrivers.getDriver('nvr').onHealth(health);
+  }
+
+  _onNvrMotion(motion) {
     Homey.ManagerDrivers.getDriver('camera').onMotion(motion);
   }
 
-  _onRecording(recording) {
-    Homey.ManagerDrivers.getDriver('camera').onRecording(recording);
+  _onNvrServer(server) {
+    Homey.ManagerDrivers.getDriver('nvr').onServer(server);
   }
 }
 

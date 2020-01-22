@@ -97,8 +97,17 @@ class Camera extends Homey.Device {
     this.setCapabilityValue('alarm_motion', false);
   }
 
-  onRecording() {
-    this.log('Recording');
+  onCamera(status) {
+    this.log('Camera');
+    this.log(status);
+    this.setCapabilityValue('camera_recording_status', status.recordingIndicator);
+    // "MOTION_STARTED"
+    // "MOTION_ENDED"
+    // "MOTION_INPROGRESS"
+    // "FTR_INPROGRESS"
+    // "DISABLED"
+    // "FAILED"
+    // "DONE";
   }
 }
 

@@ -4,27 +4,42 @@ const Homey = require('homey');
 const UfvConstants = require('../../lib/ufvconstants');
 
 class NvrDriver extends Homey.Driver {
-  onPair(socket) {
-    this.devices = {};
+  onInit() {
+    this.nvr = null;
+    this.api = Homey.app.api;
+  }
 
-    const Api = Homey.app.api;
+  async onPairListDevices(data, callback) {
+    this.api.on(UfvConstants.DEVICE_NVR, nvr => {
+      this.nvr = nvr;
 
-    Api.on(UfvConstants.DEVICE_NVR, device => {
-      if (!Object.prototype.hasOwnProperty.call(this.devices, device.mac)) {
-        this.devices[device.mac] = device;
-      }
-    });
-
-    socket.on('list_devices', (data, callback) => {
-      callback(null, Object.values(this.devices).map(device => (
+      callback(null, [
         {
-          name: device.hostname,
-          data: device,
-        }
-      )));
+          name: nvr.hostname,
+          data: { id: String(nvr.mac) },
+        },
+      ]);
     });
 
-    Api.discover();
+    this.api.discover();
+  }
+
+  onHealth(health) {
+    if (!this.nvr) return;
+
+    const device = this.getDevice({ id: String(this.nvr.mac) });
+    if (device instanceof Error) return;
+
+    device.onHealth(health);
+  }
+
+  onServer(server) {
+    if (!this.nvr) return;
+
+    const device = this.getDevice({ id: String(this.nvr.mac) });
+    if (device instanceof Error) return;
+
+    device.onServer(server);
   }
 }
 
