@@ -17,9 +17,16 @@ class CameraDriver extends Homey.Driver {
     }));
   }
 
-  async getCamera(id) {
-    if (Object.values(this.cameras).length === 0) {
-      this.cameras = await this.api.getCameras();
+  getCamera(id) {
+    if (Object.keys(this.cameras).length === 0) {
+      const fn = async () => {
+        const result = await this.api.getCameras();
+
+        Object.values(result).forEach(camera => {
+          this.cameras[camera._id] = camera;
+        });
+      };
+      fn.apply(this);
     }
     return this.cameras[id] || null;
   }

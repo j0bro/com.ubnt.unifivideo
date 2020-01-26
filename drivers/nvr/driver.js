@@ -7,6 +7,7 @@ class NvrDriver extends Homey.Driver {
   onInit() {
     this.nvr = null;
     this.api = Homey.app.api;
+    this.nvr = null;
   }
 
   async onPairListDevices(data, callback) {

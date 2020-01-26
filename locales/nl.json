@@ -10,5 +10,16 @@
         "password": "Wachtwoord",
         "apply": "Toepassen",
         "saved": "Instellingen opgeslagen."
+    },
+    "events": {
+        "camera": {
+            "motion_started": "Start beweging",
+            "motion_ended": "Einde beweging",
+            "motion_inprogress": "Beweging",
+            "ftr_inprogress": "Continu",
+            "disabled": "Uitgeschakeld",
+            "failed": "Mislukt",
+            "done": "Klaar"
+        }
     }
 }

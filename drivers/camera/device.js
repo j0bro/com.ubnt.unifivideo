@@ -85,29 +85,20 @@ class Camera extends Homey.Device {
       .catch(this.error);
   }
 
-  // eslint-disable-next-line no-unused-vars
   onMotionStart() {
-    this.log('Motion start.');
+    this.log('onMotionStart');
     this.setCapabilityValue('alarm_motion', true);
   }
 
-  // eslint-disable-next-line no-unused-vars
   onMotionEnd() {
-    this.log('Motion end.');
+    this.log('onMotionEnd');
     this.setCapabilityValue('alarm_motion', false);
   }
 
   onCamera(status) {
-    this.log('Camera');
-    this.log(status);
-    this.setCapabilityValue('camera_recording_status', status.recordingIndicator);
-    // "MOTION_STARTED"
-    // "MOTION_ENDED"
-    // "MOTION_INPROGRESS"
-    // "FTR_INPROGRESS"
-    // "DISABLED"
-    // "FAILED"
-    // "DONE";
+    this.log('onCamera]');
+    this.setCapabilityValue('camera_recording_status',
+      Homey.__(`events.camera.${String(status.recordingIndicator).toLowerCase()}`));
   }
 }
 

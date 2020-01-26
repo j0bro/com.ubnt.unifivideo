@@ -35,14 +35,14 @@ class UniFiVideo extends Homey.App {
     // Subscribe to settings updates
     Homey.ManagerSettings.on('set', key => {
       if (key === 'ufv:credentials') {
-        this._subscribeToEvents();
+        this._login();
       }
     });
 
     // Subscribe to NVR discovery
     this.api.on(UfvConstants.DEVICE_NVR, nvr => {
       Homey.ManagerSettings.set('ufv:nvrip', nvr.ip);
-      this._subscribeToEvents();
+      this._login();
     });
 
     // Discover NVR
@@ -51,20 +51,22 @@ class UniFiVideo extends Homey.App {
     this.log('[APP] UniFi Video is running.');
   }
 
-  _subscribeToEvents() {
+  _login() {
+    // Validate NVR IP address
     const nvrip = Homey.ManagerSettings.get('ufv:nvrip');
     if (!nvrip) {
       this.log('NVR IP address not set.');
       return;
     }
 
+    // Validate NVR credentials
     const credentials = Homey.ManagerSettings.get('ufv:credentials');
     if (!credentials) {
       this.log('Credentials not set.');
       return;
     }
 
-    this.log('Subscribing to events.');
+    this.log('Logging in to NVR.');
     this.api.login(credentials.username, credentials.password)
       .then(() => this.api.subscribe())
       .catch(error => this.log(error));
@@ -72,12 +74,12 @@ class UniFiVideo extends Homey.App {
 
   _onConnectionError(error) {
     this.log(`Connection error: ${error.message}, retrying in 5s...`);
-    setTimeout(() => this._subscribeToEvents(), 5000);
+    setTimeout(() => this._login(), 5000);
   }
 
   _onConnectionClosed() {
     this.log('Connection closed, retrying in 5s...');
-    setTimeout(() => this._subscribeToEvents(), 5000);
+    setTimeout(() => this._login(), 5000);
   }
 
   _onNvrCamera(camera) {

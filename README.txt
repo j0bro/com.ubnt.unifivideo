@@ -14,13 +14,11 @@ v motion alarm in Homey camera device
 v fix double snapshot target
 v Camera events in UI
 v NVR events in UI
+v Custom capabilities NVR (health:[status,phrase];server:[cpuload])
+v Custom capabilities Camera (recording:[type];recordingMode,motion)
+- update pairing flows
 - load initial device state on start
-- update pair flow:
-  - discover NVR
-  - log in 
-  - discover cameras
+- i18n event values
+- fix snapshot Image deprecations
 - Update README
   - Make sure API access is ON
-- Custom capabilities NVR (health:[status,phrase];server:[cpuload])
-- Custom capabilities Camera (recording:[type];recordingMode,motion)
-- fix snapshot Image deprecations

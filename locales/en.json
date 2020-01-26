@@ -10,5 +10,16 @@
         "password": "Password",
         "apply": "Apply",
         "saved": "Settings saved."
+    },
+    "events": {
+        "camera": {
+            "motion_started": "Motion started",
+            "motion_ended": "Motion ended",
+            "motion_inprogress": "Motion",
+            "ftr_inprogress": "Full time",
+            "disabled": "Disabled",
+            "failed": "Failed",
+            "done": "Done"
+        }
     }
 }
