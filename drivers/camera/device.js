@@ -8,19 +8,24 @@ const Api = Homey.app.api;
 
 class Camera extends Homey.Device {
   async onInit() {
+    this.camera = await this.getDriver().getCamera(this.getData().id);
+
+    // Snapshot trigger
     this._snapshotTrigger = new Homey.FlowCardTrigger(UfvConstants.EVENT_SNAPSHOT_CREATED);
     this._snapshotTrigger.register();
 
+    // Action 'take snapshot'
     new Homey.FlowCardAction(UfvConstants.ACTION_TAKE_SNAPSHOT)
       .register()
       .registerRunListener((args, state) => { // eslint-disable-line no-unused-vars
         Api.snapshot(args.device.getData().id, args.width)
-          .then(buffer => this._onSnapshotBuffer(this._getCamera(), buffer))
+          .then(buffer => this._onSnapshotBuffer(this.camera, buffer))
           .catch(this.error.bind(this, 'Could not take snapshot.'));
 
         return Promise.resolve(true);
       });
 
+    // Action 'set recording mode'
     new Homey.FlowCardAction(UfvConstants.ACTION_SET_RECORDING_MODE)
       .register()
       .registerRunListener((args, state) => { // eslint-disable-line no-unused-vars
@@ -35,10 +40,6 @@ class Camera extends Homey.Device {
       });
 
     await this._createSnapshotImage();
-  }
-
-  _getCamera() {
-    return this.getDriver().getCamera(this.getData().id);
   }
 
   _onSnapshotBuffer(camera, buffer) {
@@ -58,12 +59,14 @@ class Camera extends Homey.Device {
   }
 
   async _createSnapshotImage() {
+    this.log('Creating snapshot image.');
+
     this._snapshotImage = new Homey.Image();
     this._snapshotImage.setStream(async stream => {
       // Obtain snapshot URL
       let snapshotUrl = null;
 
-      await Api.createSnapshotUrl(this._getCamera(), 1920)
+      await Api.createSnapshotUrl(this.camera, 1920)
         .then(url => { snapshotUrl = url; })
         .catch(this.error.bind(this, 'Could not create snapshot URL.'));
 
@@ -96,7 +99,7 @@ class Camera extends Homey.Device {
   }
 
   onCamera(status) {
-    this.log('onCamera]');
+    this.log('onCamera');
     this.setCapabilityValue('camera_recording_status',
       Homey.__(`events.camera.${String(status.recordingIndicator).toLowerCase()}`));
   }

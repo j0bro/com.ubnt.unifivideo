@@ -4,7 +4,7 @@ const Homey = require('homey');
 
 class Nvr extends Homey.Device {
   onHealth(health) {
-    this.setCapabilityValue('nvr_health_status', String(health.status).toLowerCase());
+    this.setCapabilityValue('nvr_health_status', Homey.__(`events.health.${String(health.status).toLowerCase()}`));
     this.setCapabilityValue('nvr_health_phrase', String(health.statusPhrase));
   }
 

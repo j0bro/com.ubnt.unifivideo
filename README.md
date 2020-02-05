@@ -77,6 +77,10 @@ A: Unfortunately, UniFi Protect is not supported.
 If you find a bug or if you are missing a feature, please [create an issue here](https://github.com/j0bro/com.ubnt.unifivideo/issues).
 Thank you for using this app!
 
+## Attributions
+
+Icons made by [Google](https://www.flaticon.com/authors/google) from [Flaticon](https://www.flaticon.com/)
+
 [i1]: https://github.com/j0bro/com.ubnt.unifivideo/issues/1
 [i2]: https://github.com/j0bro/com.ubnt.unifivideo/issues/2
 [i5]: https://github.com/j0bro/com.ubnt.unifivideo/issues/5

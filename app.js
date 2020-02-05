@@ -6,18 +6,34 @@ const UfvConstants = require('./lib/ufvconstants');
 
 class UniFiVideo extends Homey.App {
   async onInit() {
+    // 1 pristine start - no devices paired yet
+    // 1.1 user pairs NVR
+    // 1.1.1 discover NVR
+    // 1.1.2 login
+    // 1.1.3 get bootstrap
+    // 1.1.4 save NVR
+    // 1.1.5 pair NVR
+    // 1.2 user pairs Camera
+    // 1.2.1 -> 1.1.1 thru 1.1.5
+    // 1.2.2 pair camera(s)
+    // 2 subsequent starts - NVR saved and logged in
+    // 2.1 user pairs NVR
+    // 2.1.1 -> 1.1.1 thru 1.1.5
+    // 2.2 user pairs Camera
+    // 2.2.1 select paired NVR
+    // 2.2.2 get cameras
+    // 2.2.3 pair camera(s)
+    // 3.1 user deletes NVR
+    // 3.1.1 invalidate paired camera(s)
+    // 3.2 user deletes camera
+    // 3.2.1 delete camera
+
     // Register snapshot image token
     this.snapshotToken = new Homey.FlowToken('ufv_snapshot', {
       type: 'image',
       title: 'Snapshot',
     });
     Homey.ManagerFlow.registerToken(this.snapshotToken);
-
-    // Enable remote debugging, if applicable
-    if (Homey.env.DEBUG) {
-      // eslint-disable-next-line global-require
-      require('inspector').open(9229, '0.0.0.0');
-    }
 
     // Single API instance for all devices
     this.api = new UfvApi();
@@ -32,26 +48,25 @@ class UniFiVideo extends Homey.App {
     this.api.on(UfvConstants.EVENT_NVR_MOTION, this._onNvrMotion.bind(this));
     this.api.on(UfvConstants.EVENT_NVR_SERVER, this._onNvrServer.bind(this));
 
-    // Subscribe to settings updates
+    // Subscribe to credentials updates
     Homey.ManagerSettings.on('set', key => {
       if (key === 'ufv:credentials') {
         this._login();
       }
     });
+    this._login();
 
-    // Subscribe to NVR discovery
-    this.api.on(UfvConstants.DEVICE_NVR, nvr => {
-      Homey.ManagerSettings.set('ufv:nvrip', nvr.ip);
-      this._login();
-    });
-
-    // Discover NVR
-    this.api.discover();
-
-    this.log('[APP] UniFi Video is running.');
+    // Enable remote debugging, if applicable
+    if (Homey.env.DEBUG) {
+      // eslint-disable-next-line global-require
+      require('inspector').open(9229, '0.0.0.0');
+    }
+    this.log('UniFi Video is running.');
   }
 
   _login() {
+    this.log('Logging in...');
+
     // Validate NVR IP address
     const nvrip = Homey.ManagerSettings.get('ufv:nvrip');
     if (!nvrip) {
@@ -66,9 +81,12 @@ class UniFiVideo extends Homey.App {
       return;
     }
 
-    this.log('Logging in to NVR.');
-    this.api.login(credentials.username, credentials.password)
-      .then(() => this.api.subscribe())
+    // Log in to NVR
+    this.api.login(nvrip, credentials.username, credentials.password)
+      .then(() => {
+        this.log('Logged in.');
+        this.api.subscribe();
+      })
       .catch(error => this.log(error));
   }
 

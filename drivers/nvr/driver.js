@@ -4,40 +4,99 @@ const Homey = require('homey');
 const UfvConstants = require('../../lib/ufvconstants');
 
 class NvrDriver extends Homey.Driver {
-  onInit() {
-    this.nvr = null;
+  async onInit() {
     this.api = Homey.app.api;
-    this.nvr = null;
+    this.server = null;
+    this.device = null;
+
+    this.log('NVR driver initialized.');
   }
 
-  async onPairListDevices(data, callback) {
-    this.api.on(UfvConstants.DEVICE_NVR, nvr => {
-      this.nvr = nvr;
+  onPair(socket) {
+    this.log('onPair');
 
-      callback(null, [
-        {
-          name: nvr.hostname,
-          data: { id: String(nvr.mac) },
-        },
-      ]);
+    // Create device from NVR server properties
+    const createDevice = async credentials => {
+      const nvrip = Homey.ManagerSettings.get('ufv:nvrip');
+      this.log(nvrip);
+      await this.api.login(nvrip, credentials.username, credentials.password);
+
+      this.server = await this.api.getServer();
+      this.log(this.server._id);
+      // TODO: handle undefined
+
+      this.device = {
+        name: this.server.name,
+        data: { id: String(this.server._id) },
+      };
+      socket.showView('list_devices');
+    };
+
+    // Perform when view is changed
+    socket.on('showView', (viewId, callback) => {
+      this.log(`onShowView [${viewId}]`);
+
+      if (viewId === 'login') {
+        socket.emit('nvrip', Homey.ManagerSettings.get('ufv:nvrip'));
+      }
+      callback();
     });
 
+    // Perform when user enters credentials in login screen
+    socket.on('credentials', async (credentials, callback) => {
+      this.log('onCredentials');
+
+      // Store credentials in settings
+      Homey.ManagerSettings.set('ufv:credentials', credentials);
+      callback();
+
+      createDevice(credentials);
+    });
+
+    // Perform when device list is shown
+    socket.on('list_devices', (data, callback) => {
+      callback(null, [this.device]);
+    });
+
+    // Perform when NVR is discovered
+    this.api.on(UfvConstants.DEVICE_NVR, nvr => {
+      this.log('onNvr');
+      this.log(nvr);
+      Homey.ManagerSettings.set('ufv:nvrip', nvr.ip);
+
+      const credentials = Homey.ManagerSettings.get('ufv:credentials');
+      if (credentials) {
+        createDevice(credentials);
+      } else {
+        socket.showView('login');
+      }
+    });
+
+    // Discover NVR
     this.api.discover();
+
+    // TODO: handle nothing found, use return array of discover()
   }
 
-  onHealth(health) {
-    if (!this.nvr) return;
+  async onHealth(health) {
+    this.log('onHealth');
 
-    const device = this.getDevice({ id: String(this.nvr.mac) });
+    if (!this.server) {
+      this.server = await this.api.getServer();
+    }
+    const device = this.getDevice({ id: String(this.server._id) });
     if (device instanceof Error) return;
 
     device.onHealth(health);
   }
 
-  onServer(server) {
-    if (!this.nvr) return;
+  async onServer(server) {
+    this.log('onServer');
 
-    const device = this.getDevice({ id: String(this.nvr.mac) });
+    if (!this.server) {
+      this.server = await this.api.getServer();
+    }
+    const device = this.getDevice({ id: String(this.server._id) });
     if (device instanceof Error) return;
 
     device.onServer(server);

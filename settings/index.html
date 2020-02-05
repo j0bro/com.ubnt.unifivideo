@@ -46,7 +46,7 @@
     </div>
 
     <script type="text/javascript">
-        var txtNvrip = document.getElementById('txt_nvrip');
+        var txtNvrIp = document.getElementById('txt_nvrip');
         var txtUsername = document.getElementById('txt_username');
         var txtPassword = document.getElementById('txt_password');
         var btnApply = document.getElementById('btn_apply');
@@ -57,7 +57,7 @@
                     if (error) return Homey.alert(error);
 
                     if (nvrip) {
-                        txtNvrip.value = nvrip;
+                        txtNvrIp.value = nvrip;
                     } else {
                         console.warn('[SETTINGS] Could not read NVR IP address.');
                     }
@@ -76,14 +76,14 @@
             }
 
             const saveSettings = () => {
-                Homey.set('ufv:nvrip', txtNvrip.value, (error, result) => {
+                Homey.set('ufv:nvrip', txtNvrIp.value, (error, result) => {
                     if (error) return Homey.alert(error);
                     console.log('[SETTINGS] NVR IP address saved.');
                 });
 
                 const credentials = {
-                    username: txtUsername.value,
-                    password: txtPassword.value
+                    'username': txtUsername.value,
+                    'password': txtPassword.value
                 };
 
                 Homey.set('ufv:credentials', credentials, (error, result) => {

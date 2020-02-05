@@ -1,5 +1,14 @@
 {
     "title": "UniFi Video",
+    "pair": {
+        "validate": {
+            "title": "Validating NVR",
+            "instruction": "Please add the NVR to Homey first and try again."
+        },
+        "login": {
+            "title": "Log in"
+        }
+    },
     "settings": {
         "title": "UniFi Video Settings",
         "instruction": "Log in with the credentials of the UniFi Video user.",
@@ -20,6 +29,12 @@
             "disabled": "Disabled",
             "failed": "Failed",
             "done": "Done"
+        },
+        "health": {
+            "unknown": "Unknown",
+            "green": "Healthy",
+            "orange": "Warning",
+            "red": "Critical"
         }
     }
 }

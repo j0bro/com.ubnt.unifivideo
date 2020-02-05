@@ -1,5 +1,14 @@
 {
     "title": "UniFi Video",
+    "pair": {
+        "validate": {
+            "title": "NVR valideren",
+            "instruction": "Voeg eerst de NVR aan Homey toe en probeer het daarna opnieuw."
+        },
+        "login": {
+            "title": "Inloggen"
+        }
+    },
     "settings": {
         "title": "UniFi Video instellingen",
         "instruction": "Log in met de gegevens van de UniFi Video-gebruiker.",
@@ -20,6 +29,12 @@
             "disabled": "Uitgeschakeld",
             "failed": "Mislukt",
             "done": "Klaar"
+        },
+        "health": {
+            "unknown": "Onbekend",
+            "green": "Gezond",
+            "orange": "Waarschuwing",
+            "red": "Kritiek"
         }
     }
 }

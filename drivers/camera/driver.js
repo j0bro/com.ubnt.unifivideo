@@ -6,29 +6,47 @@ class CameraDriver extends Homey.Driver {
   onInit() {
     this.api = Homey.app.api;
     this.cameras = {};
+
+    this.log('Camera driver initialized.');
   }
 
-  async onPairListDevices(data, callback) {
-    callback(null, Object.values(await this.api.getCameras()).map(camera => {
-      return {
-        data: { id: String(camera._id) },
-        name: camera.name,
-      };
-    }));
+  onPair(socket) {
+    // Validate NVR IP address
+    socket.on('validate', (data, callback) => {
+      const nvrip = Homey.ManagerSettings.get('ufv:nvrip');
+      callback(null, nvrip ? 'ok' : 'nok');
+    });
+
+    // Perform when device list is shown
+    socket.on('list_devices', async (data, callback) => {
+      callback(null, Object.values(await this.api.getCameras()).map(camera => {
+        return {
+          data: { id: String(camera._id) },
+          name: camera.name,
+        };
+      }));
+    });
   }
 
-  getCamera(id) {
+  async getCamera(id) {
+    this.log(`getCamera for [${id}]`);
+    this.log(Object.keys(this.cameras));
+    this.log(Object.keys(this.cameras).length);
+
     if (Object.keys(this.cameras).length === 0) {
-      const fn = async () => {
-        const result = await this.api.getCameras();
+      this.log('Obtaining cameras from API...');
+      const result = await this.api.getCameras();
 
-        Object.values(result).forEach(camera => {
-          this.cameras[camera._id] = camera;
-        });
-      };
-      fn.apply(this);
+      Object.values(result).forEach(camera => {
+        this.log(`Adding camera [${camera._id}]`);
+        this.cameras[camera._id] = camera;
+      });
+      this.log('Finished obtaining cameras from API.');
     }
-    return this.cameras[id] || null;
+    this.log(`# of cameras: ${Object.keys(this.cameras).length}`);
+    this.log(`Found [${this.cameras[id].name}]`);
+
+    return this.cameras[id];
   }
 
   onMotion(motion) {
