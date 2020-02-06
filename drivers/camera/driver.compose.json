@@ -1,0 +1,31 @@
+{
+  "id": "camera",
+  "class": "sensor",
+  "capabilities": [
+    "alarm_motion",
+    "camera_recording_status"
+  ],
+  "name": {
+    "en": "Camera"
+  },
+  "images": {
+    "large": "drivers/camera/assets/images/large.png",
+    "small": "drivers/camera/assets/images/small.png"
+  },
+  "pair": [
+    {
+      "id": "validate"
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

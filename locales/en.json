@@ -1,17 +1,40 @@
 {
     "title": "UniFi Video",
     "pair": {
-        "title": "Almost there",
-        "step1": "Use the link below to go to the user settings of the NVR.",
-        "step2": "Select the user which will be used for this Homey app.",
-        "step3": "Go to the 'API access' settings pane and enable 'Allow API Usage'.",
-        "step4": "Copy the 'API Key' and paste it in the box below.",
-        "nvr_user_settings": "Go to the user settings"
+        "validate": {
+            "title": "Validating NVR",
+            "instruction": "Please add the NVR to Homey first and try again."
+        },
+        "login": {
+            "title": "Log in"
+        }
     },
     "settings": {
         "title": "UniFi Video Settings",
-        "apihost": "IP address NVR",
-        "apikey": "API key",
-        "apply": "Apply settings"
+        "instruction": "Log in with the credentials of the UniFi Video user.",
+        "nvr": "NVR details",
+        "nvrip": "IP address",
+        "credentials": "UniFi Video user credentials",
+        "username": "Username",
+        "password": "Password",
+        "apply": "Apply",
+        "saved": "Settings saved."
+    },
+    "events": {
+        "camera": {
+            "motion_started": "Motion started",
+            "motion_ended": "Motion ended",
+            "motion_inprogress": "Motion",
+            "ftr_inprogress": "Full time",
+            "disabled": "Disabled",
+            "failed": "Failed",
+            "done": "Done"
+        },
+        "health": {
+            "unknown": "Unknown",
+            "green": "Healthy",
+            "orange": "Warning",
+            "red": "Critical"
+        }
     }
 }

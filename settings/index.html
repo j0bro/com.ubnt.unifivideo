@@ -6,72 +6,98 @@
 </head>
 
 <body>
+    <!-- Title -->
     <h1 data-i18n="settings.title"></h1>
 
+    <!-- Instruction -->
+    <p data-i18n="settings.instruction"></p>
+
+    <!-- NVR -->
+    <fieldset>
+        <legend data-i18n="settings.nvr"></legend>
+
+        <!-- IP address -->
+        <div class="field row">
+            <label for="txt_nvrip" data-i18n="settings.nvrip"></label>
+            <input id="txt_nvrip" type="text" value="" />
+        </div>
+    </fieldset>
+
+    <!-- Credentials -->
+    <fieldset>
+        <legend data-i18n="settings.credentials"></legend>
+
+        <!-- Username -->
+        <div class="field row">
+            <label for="txt_username" data-i18n="settings.username"></label>
+            <input id="txt_username" type="text" value="" />
+        </div>
+
+        <!-- Password -->
+        <div class="field row">
+            <label for="txt_password" data-i18n="settings.password"></label>
+            <input id="txt_password" type="password" value="" />
+        </div>
+    </fieldset>
+
+    <!-- Apply button -->
     <div class="field row">
-        <label for="txt_apihost" data-i18n="settings.apihost"></label>
-        <input id="txt_apihost" type="text" value="" />
+        <button id="btn_apply" class="right" data-i18n="settings.apply"></button>
     </div>
-    <div class="field row">
-        <label for="txt_apikey" data-i18n="settings.apikey"></label>
-        <input id="txt_apikey" type="text" value="" />
-    </div>
-    <button id="apply" class="right" data-i18n="settings.apply"></button>
 
     <script type="text/javascript">
-        var txtApiHost = document.getElementById('txt_apihost');
-        var txtApiKey = document.getElementById('txt_apikey');
-        var btnApply = document.getElementById('apply');
+        var txtNvrIp = document.getElementById('txt_nvrip');
+        var txtUsername = document.getElementById('txt_username');
+        var txtPassword = document.getElementById('txt_password');
+        var btnApply = document.getElementById('btn_apply');
 
         function onHomeyReady(Homey) {
-            function getValues() {
-                Homey.get('ufv:api:host', function (err, apiHost) {
-                    if (err) {
-                        return Homey.alert(err);
-                    }
+            const readSettings = () => {
+                Homey.get('ufv:nvrip', (error, nvrip) => {
+                    if (error) return Homey.alert(error);
 
-                    if (apiHost) {
-                        txtApiHost.value = apiHost;
+                    if (nvrip) {
+                        txtNvrIp.value = nvrip;
                     } else {
-                        console.log('[SETTINGS] API host unavailable.');
+                        console.warn('[SETTINGS] Could not read NVR IP address.');
                     }
                 });
 
-                Homey.get('ufv:api:key', function (err, apiKey) {
-                    if (err) {
-                        return Homey.alert(err);
-                    }
+                Homey.get('ufv:credentials', (error, credentials) => {
+                    if (error) return Homey.alert(error);
 
-                    if (apiKey) {
-                        txtApiKey.value = apiKey;
+                    if (credentials) {
+                        txtUsername.value = credentials.username;
+                        txtPassword.value = credentials.password;
                     } else {
-                        console.log('[SETTINGS] API key unavailable.');
+                        console.warn('[SETTINGS] Could not read credentials.');
                     }
                 });
             }
 
-            function setValues() {
-                Homey.set('ufv:api:host', txtApiHost.value, function (err, result) {
-                    if (err) {
-                        return Homey.alert(err);
-                    }
-                    console.log('[SETTINGS] API host set: ' + result);
+            const saveSettings = () => {
+                Homey.set('ufv:nvrip', txtNvrIp.value, (error, result) => {
+                    if (error) return Homey.alert(error);
+                    console.log('[SETTINGS] NVR IP address saved.');
                 });
 
-                Homey.set('ufv:api:key', txtApiKey.value, function (err, result) {
-                    if (err) {
-                        return Homey.alert(err);
-                    }
-                    console.log('[SETTINGS] API key set: ' + result);
+                const credentials = {
+                    'username': txtUsername.value,
+                    'password': txtPassword.value
+                };
+
+                Homey.set('ufv:credentials', credentials, (error, result) => {
+                    if (error) return Homey.alert(error);
+                    console.log('[SETTINGS] credentials saved.');
                 });
             }
 
-            btnApply.addEventListener('click', function (e) {
-                setValues();
+            btnApply.addEventListener('click', e => {
+                saveSettings();
+                Homey.alert(Homey.__('settings.saved'), 'info');
             });
 
-            getValues();
-            // Get Values must before ready();
+            readSettings();
             Homey.ready();
         }
     </script>
