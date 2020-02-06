@@ -1,0 +1,33 @@
+{
+  "id": "nvr",
+  "class": "other",
+  "capabilities": [
+    "nvr_cpu_load",
+    "nvr_disk_used",
+    "nvr_health_status",
+    "nvr_health_phrase"
+  ],
+  "name": {
+    "en": "Network Video Recorder"
+  },
+  "images": {
+    "large": "drivers/nvr/assets/images/large.png",
+    "small": "drivers/nvr/assets/images/small.png"
+  },
+  "pair": [
+    {
+      "id": "login"
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

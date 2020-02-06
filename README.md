@@ -21,12 +21,13 @@ Adds support for Ubiquiti UniFi Video devices in Homey.
 2. Enable 'local access' for the user and remember the username and password, you will need them later.
 3. Install this UniFi Video app on your Homey.
 4. Start the 'add device wizard' in Homey, search for your UniFi NVR and/or cameras and add them to your devices. You will be prompted to enter the credentials of the UniFi Video user you created in step 2.
-5. If the user credentials changed, they can be updated on the UniFi Video app's Settings page.
+5. If the user credentials changed in UniFi Video, they can be updated on the UniFi Video app's settings page.
 
 ## Usage
 
+* A flow can be triggered when motion detection on a camera starts or ends.
+* A flow can be triggered when a snapshot is created on a camera. This card supplies the name of the camera that created the snapshot and the snapshot image itself.
 * A flow action card can be used to create a snapshot, which is is saved to an Image tag.
-* A flow can be triggered when a snapshot is created using the UniFi Video trigger card. This card supplies the name of the camera that created the snapshot and the snapshot image itself.
 * A flow action card is available to set a camera's recording mode, being one of 'Don't record', 'Always record' or 'Record only motion'.
 
 ## Troubleshooting / FAQ
@@ -43,12 +44,8 @@ A: Unfortunately, UniFi Protect is not supported.
 ## Changelog
 
 ### Version 1.1.0
-* Added support for events:
-	* Health
-	* Camera
-	* Motion (yes, you can now use your cameras as motion sensors!)
-	* Recording
-	* Server
+* Added NVR as a device to track its health, like load, disk usage, alerts, etc.
+* Cameras are now usable as motion sensors in Homey!
 
 ### Version 1.0.0
 * Updated to comply with the new Homey App Store 

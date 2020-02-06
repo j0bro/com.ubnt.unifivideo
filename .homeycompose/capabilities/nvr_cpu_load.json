@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "units": {
+    "en": "%"
+  },
+  "title": {
+    "en": "System load",
+    "nl": "Systeembelasting"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/cpu.svg"
+}

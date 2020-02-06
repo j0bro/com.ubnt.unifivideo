@@ -1,0 +1,29 @@
+{
+  "id": "ufv_snapshot_created",
+  "title": {
+    "en": "A snapshot was created",
+    "nl": "Er is een snapshot gemaakt"
+  },
+  "tokens": [
+    {
+      "name": "ufv_snapshot_token",
+      "type": "image",
+      "title": {
+        "en": "Snapshot",
+        "nl": "Momentopname"
+      }
+    },
+    {
+      "name": "ufv_snapshot_camera",
+      "type": "string",
+      "title": {
+        "en": "Camera",
+        "nl": "Camera"
+      },
+      "example": {
+        "en": "Front door",
+        "nl": "Voordeur"
+      }
+    }
+  ]
+}

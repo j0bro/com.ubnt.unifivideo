@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "units": {
+    "en": "%"
+  },
+  "title": {
+    "en": "Disk used",
+    "nl": "Schijfgebruik"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/usage.svg"
+}

@@ -67,135 +67,6 @@
   },
   "source": "https://github.com/j0bro/com.ubnt.unifivideo",
   "support": "mailto:j.brosens+unifivideo@gmail.com",
-  "capabilities": {
-    "camera_recording_status": {
-      "type": "string",
-      "title": {
-        "en": "Recording status",
-        "nl": "Opnamestatus"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/recording.svg"
-    },
-    "nvr_cpu_load": {
-      "type": "number",
-      "units": {
-        "en": "%"
-      },
-      "title": {
-        "en": "System load",
-        "nl": "Systeembelasting"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/cpu.svg"
-    },
-    "nvr_disk_used": {
-      "type": "number",
-      "units": {
-        "en": "%"
-      },
-      "title": {
-        "en": "Disk used",
-        "nl": "Schijfgebruik"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/usage.svg"
-    },
-    "nvr_health_phrase": {
-      "type": "string",
-      "title": {
-        "en": "Status phrase",
-        "nl": "Statusomschrijving"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/bubble.svg"
-    },
-    "nvr_health_status": {
-      "type": "string",
-      "title": {
-        "en": "Status",
-        "nl": "Status"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/traffic.svg"
-    }
-  },
-  "drivers": [
-    {
-      "id": "camera",
-      "class": "sensor",
-      "capabilities": [
-        "alarm_motion",
-        "camera_recording_status"
-      ],
-      "name": {
-        "en": "Camera"
-      },
-      "images": {
-        "large": "drivers/camera/assets/images/large.png",
-        "small": "drivers/camera/assets/images/small.png"
-      },
-      "pair": [
-        {
-          "id": "validate"
-        },
-        {
-          "id": "list_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_devices"
-          }
-        },
-        {
-          "id": "add_devices",
-          "template": "add_devices"
-        }
-      ]
-    },
-    {
-      "id": "nvr",
-      "class": "other",
-      "capabilities": [
-        "nvr_cpu_load",
-        "nvr_disk_used",
-        "nvr_health_status",
-        "nvr_health_phrase"
-      ],
-      "name": {
-        "en": "Network Video Recorder"
-      },
-      "images": {
-        "large": "drivers/nvr/assets/images/large.png",
-        "small": "drivers/nvr/assets/images/small.png"
-      },
-      "pair": [
-        {
-          "id": "login"
-        },
-        {
-          "id": "list_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_devices"
-          }
-        },
-        {
-          "id": "add_devices",
-          "template": "add_devices"
-        }
-      ]
-    }
-  ],
   "flow": {
     "triggers": [
       {
@@ -295,5 +166,134 @@
         ]
       }
     ]
+  },
+  "drivers": [
+    {
+      "id": "camera",
+      "class": "sensor",
+      "capabilities": [
+        "alarm_motion",
+        "camera_recording_status"
+      ],
+      "name": {
+        "en": "Camera"
+      },
+      "images": {
+        "large": "drivers/camera/assets/images/large.png",
+        "small": "drivers/camera/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "validate"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "nvr",
+      "class": "other",
+      "capabilities": [
+        "nvr_cpu_load",
+        "nvr_disk_used",
+        "nvr_health_status",
+        "nvr_health_phrase"
+      ],
+      "name": {
+        "en": "Network Video Recorder"
+      },
+      "images": {
+        "large": "drivers/nvr/assets/images/large.png",
+        "small": "drivers/nvr/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "login"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ]
+    }
+  ],
+  "capabilities": {
+    "camera_recording_status": {
+      "type": "string",
+      "title": {
+        "en": "Recording status",
+        "nl": "Opnamestatus"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/recording.svg"
+    },
+    "nvr_cpu_load": {
+      "type": "number",
+      "units": {
+        "en": "%"
+      },
+      "title": {
+        "en": "System load",
+        "nl": "Systeembelasting"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/cpu.svg"
+    },
+    "nvr_disk_used": {
+      "type": "number",
+      "units": {
+        "en": "%"
+      },
+      "title": {
+        "en": "Disk used",
+        "nl": "Schijfgebruik"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/usage.svg"
+    },
+    "nvr_health_phrase": {
+      "type": "string",
+      "title": {
+        "en": "Status phrase",
+        "nl": "Statusomschrijving"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/bubble.svg"
+    },
+    "nvr_health_status": {
+      "type": "string",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/traffic.svg"
+    }
   }
 }

@@ -1,0 +1,41 @@
+{
+  "id": "ufv_set_recording_mode",
+  "title": {
+    "en": "Set recording mode",
+    "nl": "Stel opnamemodus in"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=camera"
+    },
+    {
+      "name": "recording_mode",
+      "type": "dropdown",
+      "values": [
+        {
+          "id": "none",
+          "label": {
+            "en": "Don't record",
+            "nl": "Niet opnemen"
+          }
+        },
+        {
+          "id": "always",
+          "label": {
+            "en": "Always record",
+            "nl": "Altijd opnemen"
+          }
+        },
+        {
+          "id": "motion",
+          "label": {
+            "en": "Record only motion",
+            "nl": "Alleen beweging opnemen"
+          }
+        }
+      ]
+    }
+  ]
+}
