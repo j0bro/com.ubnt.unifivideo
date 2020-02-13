@@ -1,3 +1,7 @@
+Features:
+Use your UniFi Video cameras as motion alert sensors.
+Monitor your NVR's health in a dedicated, new NVR device.
+
 Supported device models:
 - UniFi® NVR (Network Video Recorder):
 	- UVC‑NVR
@@ -9,9 +13,5 @@ Supported device models:
 	- UVC-G3-PRO
 - UniFi® Video Camera G4 series:
 	- UVC-G4-PRO
-
-What's new:
-You can now use your UniFi Video cameras as motion alert sensors in Homey! 
-Monitor your NVR's health in a dedicated, new NVR device.
 
 Note: if you are upgrading from a previous (beta) version, please re-add your devices.
