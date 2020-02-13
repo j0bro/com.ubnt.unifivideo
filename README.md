@@ -41,34 +41,6 @@ A: Make sure the UniFi Video user is part of a group that has the `edit camera` 
 Q: I am running UniFi Protect on a Cloud Key V2, can I use this app with it?
 A: Unfortunately, UniFi Protect is not supported.
 
-## Changelog
-
-### Version 1.1.0
-* Added NVR as a device to track its health, like load, disk usage, alerts, etc.
-* Cameras are now usable as motion sensors in Homey!
-
-### Version 1.0.0
-* Updated to comply with the new Homey App Store 
-* Moved out of beta/testing
-
-### Version 0.9.3
-* Adds support for Homey Camera SDK
-* Adds support for UVC G3 Flex
-* Adds support for UVC G3 Micro
-* Adds support for UVC G3 Pro
-* Adds support for UVC G4 Pro
-
-### Version 0.9.2
-* NVR can't be discovered if it's on a different subnet than Homey ([#5][i5])
-* UVC G3 Dome camera can't be discovered ([#6][i6])
-
-### Version 0.9.1
-* Device pairing wizard doesn't ask the user for the API key ([#1][i1])
-* Add support for controlling recording mode ([#2][i2])
-
-### Version 0.9.0
-* Initial beta release.
-
 ## Feedback
 
 If you find a bug or if you are missing a feature, please [create an issue here](https://github.com/j0bro/com.ubnt.unifivideo/issues).

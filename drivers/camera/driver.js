@@ -29,10 +29,6 @@ class CameraDriver extends Homey.Driver {
   }
 
   async getCamera(id) {
-    this.log(`getCamera for [${id}]`);
-    this.log(Object.keys(this.cameras));
-    this.log(Object.keys(this.cameras).length);
-
     if (Object.keys(this.cameras).length === 0) {
       this.log('Obtaining cameras from API...');
       const result = await this.api.getCameras();
@@ -43,7 +39,6 @@ class CameraDriver extends Homey.Driver {
       });
       this.log('Finished obtaining cameras from API.');
     }
-    this.log(`# of cameras: ${Object.keys(this.cameras).length}`);
     this.log(`Found [${this.cameras[id].name}]`);
 
     return this.cameras[id];

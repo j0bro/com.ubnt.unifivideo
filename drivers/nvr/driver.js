@@ -22,8 +22,6 @@ class NvrDriver extends Homey.Driver {
       await this.api.login(nvrip, credentials.username, credentials.password);
 
       this.server = await this.api.getServer();
-      this.log(this.server._id);
-      // TODO: handle undefined
 
       this.device = {
         name: this.server.name,
@@ -61,7 +59,6 @@ class NvrDriver extends Homey.Driver {
     // Perform when NVR is discovered
     this.api.on(UfvConstants.DEVICE_NVR, nvr => {
       this.log('onNvr');
-      this.log(nvr);
       Homey.ManagerSettings.set('ufv:nvrip', nvr.ip);
 
       const credentials = Homey.ManagerSettings.get('ufv:credentials');
@@ -74,8 +71,6 @@ class NvrDriver extends Homey.Driver {
 
     // Discover NVR
     this.api.discover();
-
-    // TODO: handle nothing found, use return array of discover()
   }
 
   async onHealth(health) {
